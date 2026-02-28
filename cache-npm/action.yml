@@ -1,0 +1,28 @@
+name: 'Cache npm'
+description: 'Setup cache for npm'
+inputs:
+  cache-enabled:
+    description: 'NPM cache enabled. If unset, the cache will be enabled if a package-lock.json file is found.'
+    required: false
+  cache-path:
+    description: 'NPM cache directory path'
+    required: false
+    default: ~/.npm
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Configure npm cache path
+      shell: bash
+      run: |
+        echo "NPM_CONFIG_CACHE=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+        echo "npm_config_cache=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/package-lock.json') != ''))
+
+    - name: 📦 Cache npm
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+      with:
+        path: ${{ inputs.cache-path }}
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/package-lock.json') != ''))
