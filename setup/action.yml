@@ -1,0 +1,85 @@
+name: 'CI setup'
+description: 'Checkout, Turbo cache, asdf/Node, corepack'
+inputs:
+  github-token:
+    description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
+    required: false
+  nx-cache:
+    description: 'Enable or disable Nx cache from github actions cache. When unset, Nx cache runs only if nx.json exists.'
+    required: false
+  turbo-cache:
+    description: 'Enable or disable TurboRepo cache from github actions cache. When unset, Turbo cache runs only if turbo.json exists.'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Setup tools
+      uses: asdf-vm/actions/install@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4
+      if: hashFiles('.tool-versions') != ''
+
+    # Always restore npm cache
+    - uses: w5s/actions/cache-npm@main
+      if: hashFiles('package.json') != ''
+
+    - name: ⚙️ Install Node Package Manager
+      shell: bash
+      run: |
+        package_manager=$(jq -r '.packageManager // empty' package.json)
+        if [ -n "$package_manager" ]; then
+          echo "Package manager: $package_manager"
+          corepack enable
+
+          if command -v asdf >/dev/null 2>&1; then
+            asdf reshim nodejs
+          fi
+        fi
+      if: hashFiles('package.json') != ''
+
+    - uses: w5s/actions/cache-yarn@main
+      if: hashFiles('yarn.lock') != ''
+    - uses: w5s/actions/cache-pnpm@main
+      if: hashFiles('pnpm-lock.yaml') != ''
+    - uses: w5s/actions/cache-bun@main
+      if: hashFiles('bun.lockb') != ''
+
+    - name: 🔧 Configure npm for GitHub Packages
+      shell: bash
+      run: npm config set "//npm.pkg.github.com/:_authToken=${{ inputs.github-token }}" --location=user
+      if: inputs.github-token != ''
+
+    - name: ⚙️ Setup Turbo cache
+      uses: rharkor/caching-for-turbo@a1c4079258ae08389be75b57d4d7a70f23c1c66d # v1.8
+      if: inputs.turbo-cache == 'true' || (inputs.turbo-cache != 'false' && hashFiles('turbo.json') != '')
+
+    - name: ⚙️ Setup Nx
+      uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4
+      id: nx-set-shas
+      with:
+        gh-token: ${{ inputs.github-token }}
+      if: hashFiles('nx.json') != ''
+
+    # Local Nx cache (when not using Nx Cloud). Key by nx config + HEAD for exact re-runs;
+    # restore-keys use base then any OS+config cache so config changes invalidate cache.
+    - name: ⚙️ Setup Nx cache
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+      with:
+        path: .nx/cache
+        key: nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-${{ steps.nx-set-shas.outputs.head }}
+        restore-keys: |
+          nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-${{ steps.nx-set-shas.outputs.base }}
+          nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-
+      if: steps.nx-set-shas.outcome == 'success' && (inputs.nx-cache == 'true' || (inputs.nx-cache != 'false' && hashFiles('nx.json') != ''))
+
+    - name: ℹ️ Package manager information
+      shell: bash
+      run: |
+        if [ -f yarn.lock ]; then
+          echo "yarn: $(yarn --version)"
+        elif [ -f pnpm-lock.yaml ]; then
+          echo "pnpm: $(pnpm --version)"
+        elif [ -f package-lock.json ]; then
+          echo "npm: $(npm --version)"
+        else
+          echo 'No lockfile found (yarn.lock, pnpm-lock.yaml, or package-lock.json).'
+        fi
+      if: hashFiles('package.json') != ''
