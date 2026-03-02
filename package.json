@@ -21,15 +21,15 @@
     "lint": "npx run-p \"lint:*\"",
     "lint:root": "eslint .",
     "mrm": "npm exec --package=mrm -- mrm --preset @w5s/mrm-preset",
+    "prepare": "npx run-p \"prepare:*\"",
+    "prepare:githooks": "if [ -z \"${CI:-}\" ]; then git config core.hooksPath .githooks; fi",
     "release": ":",
     "rescue": "git clean -fdx;npm install",
     "spellcheck": "npx run-p \"spellcheck:*\"",
     "spellcheck:root": "cspell --no-progress '**' ",
     "test": "npx run-p \"test:*\"",
-    "validate": "turbo run build lint test spellcheck",
     "test:root": "vitest run",
-    "prepare": "npx run-p \"prepare:*\"",
-    "prepare:githooks": "if [ -z \"${CI:-}\" ]; then git config core.hooksPath .githooks; fi"
+    "validate": "turbo run build lint test spellcheck"
   },
   "commitlint": {
     "extends": [
@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@types/node": "20.19.35",
+    "@w5s/commitlint-config": "3.0.6",
     "@w5s/eslint-config": "3.3.4",
     "cspell": "9.7.0",
     "eslint": "9.39.3",
