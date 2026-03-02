@@ -1,0 +1,74 @@
+{
+  "name": "@w5s/actions",
+  "version": "1.0.0-alpha.0",
+  "private": true,
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:w5s/actions.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "files": [],
+  "scripts": {
+    "build": "npx run-p \"build:*\"",
+    "clean": "npx run-p \"clean:*\"",
+    "code-analysis": ":",
+    "configure": "npm run mrm -- configure",
+    "coverage": ":",
+    "format": "npx run-p \"format:*\"",
+    "format:root": "eslint . --fix",
+    "lint": "npx run-p \"lint:*\"",
+    "lint:root": "eslint .",
+    "mrm": "npm exec --package=mrm -- mrm --preset @w5s/mrm-preset",
+    "release": ":",
+    "rescue": "git clean -fdx;npm install",
+    "spellcheck": "npx run-p \"spellcheck:*\"",
+    "spellcheck:root": "cspell --no-progress '**' ",
+    "test": "npx run-p \"test:*\"",
+    "validate": "turbo run build lint test spellcheck",
+    "test:root": "vitest run",
+    "prepare": "npx run-p \"prepare:*\"",
+    "prepare:githooks": "if [ -z \"${CI:-}\" ]; then git config core.hooksPath .githooks; fi"
+  },
+  "commitlint": {
+    "extends": [
+      "@w5s/commitlint-config"
+    ]
+  },
+  "lint-staged": {
+    "!(**/dist/**)*.js?(x)": [
+      "eslint"
+    ],
+    "!(**/dist/**)*.ts?(x)": [
+      "eslint"
+    ],
+    "*.{json,jsonc,json5}": [
+      "eslint"
+    ],
+    "*.{yml,yaml}": [
+      "eslint"
+    ],
+    "*.js?(x)": [
+      "eslint"
+    ],
+    "*.ts?(x)": [
+      "eslint"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "20.19.35",
+    "@w5s/eslint-config": "3.3.4",
+    "cspell": "9.7.0",
+    "eslint": "9.39.3",
+    "npm-run-all2": "8.0.4",
+    "typescript": "5.9.3"
+  },
+  "packageManager": "pnpm@10.30.3",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=6.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "sideEffect": false
+}
