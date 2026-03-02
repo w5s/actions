@@ -1,0 +1,27 @@
+name: 'Cache pnpm'
+description: 'Setup cache for pnpm'
+inputs:
+  cache-enabled:
+    description: 'pnpm cache enabled. If unset, the cache will be enabled if a pnpm-lock.yaml file is found.'
+    required: false
+  cache-path:
+    description: 'pnpm store directory path'
+    required: false
+    default: ~/.pnpm-store
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Configure pnpm store path
+      shell: bash
+      run: |
+        echo "PNPM_STORE_PATH=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))
+
+    - name: 📦 Cache pnpm
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+      with:
+        path: ${{ inputs.cache-path }}
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))
