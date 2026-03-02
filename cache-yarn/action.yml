@@ -1,0 +1,27 @@
+name: 'Cache yarn'
+description: 'Setup cache for yarn'
+inputs:
+  cache-enabled:
+    description: 'Yarn cache enabled. If unset, the cache will be enabled if a yarn.lock file is found.'
+    required: false
+  cache-path:
+    description: 'Yarn cache directory path'
+    required: false
+    default: ~/.cache/yarn
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Configure yarn cache path
+      shell: bash
+      run: |
+        echo "YARN_CACHE_FOLDER=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/yarn.lock') != ''))
+
+    - name: 📦 Cache yarn
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+      with:
+        path: ${{ inputs.cache-path }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/yarn.lock') != ''))
