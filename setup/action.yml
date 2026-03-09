@@ -34,12 +34,15 @@ runs:
 
     - name: ⚙️ Set Node version with asdf
       shell: bash
-      run: asdf set nodejs "${{ inputs.node-version }}"
+      run: |
+        asdf plugin add nodejs || true
+        asdf set nodejs "${{ inputs.node-version }}"
       if: inputs.node-version != ''
 
     - name: ⚙️ Install tools
-      shell: bash
-      run: asdf install
+      uses: asdf-vm/actions/setup@v4
+      with:
+        skip_install: true
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     # Always restore npm cache
