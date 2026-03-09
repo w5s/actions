@@ -27,7 +27,7 @@ Use in a job after `actions/checkout`:
     # node-version: '24'                 # optional major (resolved at runtime to latest patch)
     # node-version: '24.14'              # optional major.minor (resolved at runtime to latest patch)
     # node-version: '24.14.0'            # optional exact version (used as-is)
-    github-token: ${{ secrets.GITHUB_TOKEN }}  # optional, for GitHub Packages
+    github-token: ${{ secrets.GITHUB_TOKEN }} # optional, for GitHub Packages
     # turbo-cache: 'true'   # optional override
     # nx-cache: 'false'     # optional override
 
