@@ -60,6 +60,10 @@ runs:
         asdf set nodejs "$resolved"
       if: inputs.node-version != ''
 
+    - name: ⚙️ Install asdf plugins
+      uses: asdf-vm/actions/plugins-add@v4
+      if: hashFiles('.tool-versions') != ''
+
     - name: ⚙️ Install tools
       shell: bash
       run: asdf install
