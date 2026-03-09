@@ -8,7 +8,7 @@ inputs:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
     required: false
   node-version:
-    description: 'Node.js version to set with asdf (`asdf set nodejs <version>`) before asdf install.'
+    description: 'Node.js version to set with asdf before install; supports major-only (e.g. 24), major.minor (e.g. 24.14), or exact semver (e.g. 24.14.0).'
     required: false
   npm-cache:
     description: 'Enable or disable npm cache from github actions cache. When unset, npm cache runs only if package-lock.json exists.'
@@ -25,6 +25,10 @@ inputs:
   yarn-cache:
     description: 'Enable or disable Yarn cache from github actions cache. When unset, Yarn cache runs only if yarn.lock exists.'
     required: false
+outputs:
+  resolved-node-version:
+    description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
+    value: ${{ steps.resolve-node-version.outputs.resolved-node-version }}
 runs:
   using: 'composite'
   steps:
@@ -32,17 +36,33 @@ runs:
       uses: asdf-vm/actions/setup@v4
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
-    - name: ⚙️ Set Node version with asdf
+    - name: ⚙️ Set Node version (if node-version is set)
+      id: resolve-node-version
       shell: bash
       run: |
+        requested="${{ inputs.node-version }}"
         asdf plugin add nodejs || true
-        asdf set nodejs "${{ inputs.node-version }}"
+        if [[ "$requested" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          resolved="$requested"
+        elif [[ "$requested" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+          resolved="$(asdf latest nodejs "$requested" 2>/dev/null || true)"
+          resolved="$(echo "$resolved" | tr -d '[:space:]')"
+          if [[ -z "$resolved" || ! "$resolved" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Could not resolve Node.js version selector $requested"
+            exit 1
+          fi
+        else
+          echo "Invalid node-version input: $requested. Expected major-only (e.g. 24), major.minor (e.g. 24.14), or exact semver (e.g. 24.14.0)."
+          exit 1
+        fi
+        echo "Resolved Node.js version: $resolved"
+
+        asdf set nodejs "$resolved"
       if: inputs.node-version != ''
 
     - name: ⚙️ Install tools
-      uses: asdf-vm/actions/setup@v4
-      with:
-        skip_install: true
+      shell: bash
+      run: asdf install
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     # Always restore npm cache
