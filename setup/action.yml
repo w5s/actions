@@ -1,14 +1,26 @@
 name: 'CI setup'
 description: 'Checkout, Turbo cache, asdf/Node, corepack'
 inputs:
+  bun-cache:
+    description: 'Enable or disable Bun cache from github actions cache. When unset, Bun cache runs only if bun.lockb exists.'
+    required: false
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
+    required: false
+  pnpm-cache:
+    description: 'Enable or disable pnpm cache from github actions cache. When unset, pnpm cache runs only if pnpm-lock.yaml exists.'
+    required: false
+  npm-cache:
+    description: 'Enable or disable npm cache from github actions cache. When unset, npm cache runs only if package-lock.json exists.'
     required: false
   nx-cache:
     description: 'Enable or disable Nx cache from github actions cache. When unset, Nx cache runs only if nx.json exists.'
     required: false
   turbo-cache:
     description: 'Enable or disable TurboRepo cache from github actions cache. When unset, Turbo cache runs only if turbo.json exists.'
+    required: false
+  yarn-cache:
+    description: 'Enable or disable Yarn cache from github actions cache. When unset, Yarn cache runs only if yarn.lock exists.'
     required: false
 runs:
   using: 'composite'
@@ -19,7 +31,7 @@ runs:
 
     # Always restore npm cache
     - uses: w5s/actions/cache-npm@main
-      if: hashFiles('package.json') != ''
+      if: inputs.npm-cache == 'true' || (inputs.npm-cache != 'false' && hashFiles('package-lock.json') != '')
 
     - name: ⚙️ Install Node Package Manager
       shell: bash
@@ -41,11 +53,11 @@ runs:
       if: hashFiles('package.json') != ''
 
     - uses: w5s/actions/cache-yarn@main
-      if: hashFiles('yarn.lock') != ''
+      if: inputs.yarn-cache == 'true' || (inputs.yarn-cache != 'false' && hashFiles('yarn.lock') != '')
     - uses: w5s/actions/cache-pnpm@main
-      if: hashFiles('pnpm-lock.yaml') != ''
+      if: inputs.pnpm-cache == 'true' || (inputs.pnpm-cache != 'false' && hashFiles('pnpm-lock.yaml') != '')
     - uses: w5s/actions/cache-bun@main
-      if: hashFiles('bun.lockb') != ''
+      if: inputs.bun-cache == 'true' || (inputs.bun-cache != 'false' && hashFiles('bun.lockb') != '')
 
     - name: 🔧 Configure npm for GitHub Packages
       shell: bash
