@@ -23,13 +23,13 @@ Use in a job after `actions/checkout`:
   uses: w5s/actions/setup@main
   id: setup
   with:
-    # node-version: '24'                 # optional major (resolved at runtime to latest patch)
-    # node-version: '24.14'              # optional major.minor (resolved at runtime to latest patch)
-    # node-version: '24.14.0'            # optional exact version (used as-is)
-    # github-token: ${{ secrets.GITHUB_TOKEN }} # optional, defaults to github.token (for GitHub Packages)
-    # node-cache: 'true'    # optional: force enable package manager cache
-    # turbo-cache: 'true'   # optional: force enable Turbo cache
-    # nx-cache: 'false'     # optional: disable Nx cache
+    node-version: '24' # optional major
+    # node-version: '24.14' # optional minor
+    # node-version: '24.14.0' # optional exact version (used as-is)
+    github-token: ${{ secrets.GITHUB_TOKEN }} # optional, defaults to github.token (for GitHub Packages)
+    node-cache: false # optional: force enable/disable package manager cache
+    turbo-cache: false # optional: force enable/disable Turbo cache
+    nx-cache: false # optional: force enable/disable Nx cache
 
 - name: ℹ️ Resolved Node version
   run: echo "Node = ${{ steps.setup.outputs.resolved-node-version }}"
