@@ -62,7 +62,7 @@ runs:
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     # Always restore npm cache
-    - uses: Inthememory/actions/cache-npm@main
+    - uses: w5s/actions/cache-npm@main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('package-lock.json') != '')
 
     - name: ⚙️ Install Node Package Manager
@@ -84,11 +84,11 @@ runs:
         fi
       if: hashFiles('package.json') != ''
 
-    - uses: Inthememory/actions/cache-yarn@main
+    - uses: w5s/actions/cache-yarn@main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('yarn.lock') != '')
-    - uses: Inthememory/actions/cache-pnpm@main
+    - uses: w5s/actions/cache-pnpm@main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('pnpm-lock.yaml') != '')
-    - uses: Inthememory/actions/cache-bun@main
+    - uses: w5s/actions/cache-bun@main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('bun.lockb') != '')
 
     - name: 🔧 Configure npm for GitHub Packages
