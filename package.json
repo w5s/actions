@@ -63,7 +63,6 @@
     "@w5s/eslint-config": "3.5.3",
     "cspell": "9.7.0",
     "eslint": "10.0.3",
-    "npm-run-all2": "8.0.4",
     "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.32.1",
