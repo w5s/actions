@@ -1,0 +1,32 @@
+name: 'CI task'
+description: 'Run a named task via Make or Node (package manager), with auto-detection'
+inputs:
+  task:
+    description: 'Task name: Make target and/or npm/pnpm/yarn script (e.g. validate, build, test).'
+    required: true
+  task-manager:
+    description: "Which runner to use: make (make <task>), node (<pm> run <task>), or auto (detect from Makefile vs package.json; Makefile wins when both exist)."
+    required: false
+    default: 'auto'
+  github-token:
+    description: 'GitHub token for tooling that needs GITHUB_TOKEN (e.g. GitHub Packages).'
+    required: false
+    default: ${{ github.token }}
+  node-options:
+    description: 'Node options (NODE_OPTIONS), e.g. --max-old-space-size=8192.'
+    required: false
+    default: '--max-old-space-size=8192'
+runs:
+  using: 'composite'
+  steps:
+    - name: Run task
+      shell: bash
+      env:
+        CI_TASK_NAME: ${{ inputs.task }}
+        CI_TASK_MANAGER: ${{ inputs['task-manager'] }}
+        NODE_OPTIONS: ${{ inputs.node-options }}
+      run: |
+        if [ -n "${{ inputs.github-token }}" ]; then
+          export GITHUB_TOKEN=${{ inputs.github-token }}
+        fi
+        bash "${{ github.action_path }}/main.sh"
