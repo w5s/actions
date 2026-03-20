@@ -5,7 +5,7 @@ inputs:
     description: 'Task name: Make target and/or npm/pnpm/yarn script (e.g. validate, build, test).'
     required: true
   task-manager:
-    description: "Which runner to use: make (make <task>), node (<pm> run <task>), or auto (detect from Makefile vs package.json; Makefile wins when both exist)."
+    description: 'Which runner to use: make (make <task>), node (<pm> run <task>), or auto (detect from Makefile vs package.json; Makefile wins when both exist).'
     required: false
     default: 'auto'
   github-token:

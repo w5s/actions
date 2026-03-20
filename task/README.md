@@ -13,7 +13,7 @@ When both a makefile and `package.json` exist, **auto** chooses **make** first.
 ## Usage
 
 ```yaml
-- # other setup steps ...
+# - other setup steps ...
 
 - name: 🔍 Validate
   uses: w5s/actions/task@main
