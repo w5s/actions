@@ -14,7 +14,7 @@ runs:
     - name: ⚙️ Configure pnpm store path
       shell: bash
       run: |
-        echo "PNPM_STORE_PATH=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+        pnpm config set store-dir "${{ inputs.cache-path }}"
       if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))
 
     - name: 📦 Cache pnpm
