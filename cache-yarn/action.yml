@@ -15,7 +15,7 @@ runs:
       shell: bash
       run: |
         echo "YARN_CACHE_FOLDER=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/yarn.lock') != ''))
+      if: inputs.cache-path != ''
 
     - name: 📦 Cache yarn
       uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
@@ -24,4 +24,4 @@ runs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/yarn.lock') != ''))
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && inputs.cache-path != '' && hashFiles('**/yarn.lock') != ''))

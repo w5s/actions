@@ -16,7 +16,7 @@ runs:
       run: |
         echo "NPM_CONFIG_CACHE=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
         echo "npm_config_cache=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/package-lock.json') != ''))
+      if: inputs.cache-path != ''
 
     - name: 📦 Cache npm
       uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
@@ -25,4 +25,4 @@ runs:
         key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-npm-
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/package-lock.json') != ''))
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && inputs.cache-path != '' && hashFiles('**/package-lock.json') != ''))
