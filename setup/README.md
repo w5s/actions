@@ -8,7 +8,7 @@ Checkout is expected to be done before. This composite action configures the run
 - **Nx cache**: when `nx.json` exists (or `nx-cache` is `true`), computes base/head SHAs and restores/saves local `.nx/cache`.
 - **Tools via asdf**: runs `asdf-vm/actions/setup`, resolves `node-version` to an exact Node.js version, applies `asdf set nodejs <resolved>`, then runs `asdf install`.
 - **Package manager cache**: when `node-cache` is not `false`, restores/saves npm cache (when `package-lock.json` exists), Yarn cache (when `yarn.lock` exists), pnpm store (when `pnpm-lock.yaml` exists), or Bun cache (when `bun.lockb` exists). Use `node-cache: 'true'` to force enable or `node-cache: 'false'` to disable.
-- **Corepack**: enables Corepack when `package.json` declares `packageManager` (for Yarn/pnpm/Bun).
+- **Corepack**: enables Corepack when `package.json` declares `packageManager` (for Yarn/pnpm/Bun) via `w5s/actions/setup-corepack`.
 - **GitHub Packages**: when `github-token` is set (defaults to `github.token`), configures npm for `//npm.pkg.github.com`.
 
 ## Usage

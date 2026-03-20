@@ -80,23 +80,8 @@ runs:
     - uses: w5s/actions/cache-npm@main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('package-lock.json') != '')
 
-    - name: ⚙️ Install Node Package Manager
-      shell: bash
-      run: |
-        package_manager=$(jq -r '.packageManager // empty' package.json)
-        if [ -n "$package_manager" ]; then
-          # Install corepack if not found
-          if ! command -v corepack >/dev/null 2>&1; then
-            npm install -g corepack
-          fi
-
-          echo "Package manager: $package_manager"
-          corepack enable
-
-          if command -v asdf >/dev/null 2>&1; then
-            asdf reshim nodejs
-          fi
-        fi
+    - name: ⚙️ Setup Node package manager
+      uses: w5s/actions/setup-corepack@main
       if: hashFiles('package.json') != ''
 
     - uses: w5s/actions/cache-yarn@main
