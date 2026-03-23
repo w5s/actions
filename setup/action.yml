@@ -28,7 +28,7 @@ inputs:
 outputs:
   resolved-node-version:
     description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
-    value: ${{ steps.resolve-node-version.outputs.resolved-version }}
+    value: ${{ steps.setup-asdf.outputs.resolved-node-version }}
 runs:
   using: 'composite'
   steps:
@@ -39,25 +39,11 @@ runs:
         git config user.email "${{ inputs.git-user-email }}"
       if: inputs.git-user-name != '' && inputs.git-user-email != ''
 
-    - name: ⚙️ Setup asdf
-      uses: asdf-vm/actions/setup@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4
-      if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
-
-    - name: ⚙️ Set Node version (if node-version is set)
-      id: resolve-node-version
-      uses: w5s/actions/setup-asdf-tool@main
+    - name: ⚙️ Setup asdf tools
+      id: setup-asdf
+      uses: w5s/actions/setup-asdf@main
       with:
-        tool: nodejs
-        version: ${{ inputs.node-version }}
-      if: inputs.node-version != ''
-
-    - name: ⚙️ Install asdf plugins
-      uses: asdf-vm/actions/plugins-add@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4
-      if: hashFiles('.tool-versions') != ''
-
-    - name: ⚙️ Install tools
-      shell: bash
-      run: asdf install
+        node-version: ${{ inputs.node-version }}
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     # Always restore npm cache

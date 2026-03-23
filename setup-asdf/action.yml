@@ -1,0 +1,30 @@
+name: 'Setup asdf tools'
+description: 'Setup asdf, optionally resolve Node.js version, and install tools'
+inputs:
+  node-version:
+    description: 'Node.js version to set with asdf before install; supports major-only (e.g. 24), major.minor (e.g. 24.14), or exact semver (e.g. 24.14.0).'
+    required: false
+outputs:
+  resolved-node-version:
+    description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
+    value: ${{ steps.resolve-node-version.outputs.resolved-node-version }}
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Setup asdf
+      uses: asdf-vm/actions/setup@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4
+
+    - name: ⚙️ Set Node version (if node-version is set)
+      id: resolve-node-version
+      uses: w5s/actions/setup-asdf-tool@main
+      with:
+        tool: nodejs
+        version: ${{ inputs.node-version }}
+      if: inputs.node-version != ''
+
+    - name: ⚙️ Install asdf plugins
+      uses: asdf-vm/actions/plugins-add@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4
+
+    - name: ⚙️ Install tools
+      shell: bash
+      run: asdf install
