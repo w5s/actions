@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Resolve task-manager (make | node | auto) and run make <task> or <pm> run <task>.
-# To add a backend: add has_*(), register in resolve_auto() and run_resolved().
+# Resolve task-manager (make | npm | pnpm | yarn | bun | auto) and run make <task>
+# or <pm> run <task>. To add a backend: add has_*(), register in
+# detect_node_package_manager(), normalize_manager_input(), and run_resolved().
 
 set -euo pipefail
 
@@ -19,13 +20,53 @@ has_package_json() {
   [[ -f package.json ]]
 }
 
+has_npm_lockfile() {
+  [[ -f package-lock.json ]]
+}
+
+has_pnpm_lockfile() {
+  [[ -f pnpm-lock.yaml ]]
+}
+
+has_yarn_lockfile() {
+  [[ -f yarn.lock ]]
+}
+
+has_bun_lockfile() {
+  [[ -f bun.lock || -f bun.lockb ]]
+}
+
+detect_node_package_manager() {
+  local detected=()
+
+  if has_yarn_lockfile; then
+    detected+=(yarn)
+  fi
+  if has_pnpm_lockfile; then
+    detected+=(pnpm)
+  fi
+  if has_bun_lockfile; then
+    detected+=(bun)
+  fi
+  if has_npm_lockfile; then
+    detected+=(npm)
+  fi
+
+  if [[ "${#detected[@]}" -gt 1 ]]; then
+    echo "ci-task: multiple Node lockfiles found (${detected[*]}). Keep only one of yarn.lock, pnpm-lock.yaml, bun.lock/bun.lockb, or package-lock.json." >&2
+    exit 1
+  fi
+
+  if [[ "${#detected[@]}" -eq 1 ]]; then
+    echo "${detected[0]}"
+  fi
+}
+
 resolve_auto() {
   if has_makefile; then
     echo make
-  elif has_package_json; then
-    echo node
   else
-    echo ""
+    detect_node_package_manager
   fi
 }
 
@@ -33,12 +74,21 @@ normalize_manager_input() {
   local raw
   raw="$(echo "${CI_TASK_MANAGER:-auto}" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')"
   case "$raw" in
-    make | node | auto) echo "$raw" ;;
+    make | npm | pnpm | yarn | bun | auto) echo "$raw" ;;
     *)
-      echo "ci-task: invalid task-manager '${CI_TASK_MANAGER:-}'. Use auto, make, or node." >&2
+      echo "ci-task: invalid task-manager '${CI_TASK_MANAGER:-}'. Use auto, make, npm, pnpm, yarn, or bun." >&2
       exit 1
       ;;
   esac
+}
+
+validate_node_task_manager() {
+  local pm="$1"
+
+  if ! has_package_json; then
+    echo "ci-task: task-manager is $pm but package.json not found." >&2
+    exit 1
+  fi
 }
 
 resolve_task_manager() {
@@ -48,7 +98,7 @@ resolve_task_manager() {
     auto)
       resolved="$(resolve_auto)"
       if [[ -z "$resolved" ]]; then
-        echo "ci-task: task-manager auto — no Makefile or package.json found; skipping."
+        echo "ci-task: task-manager auto — no Makefile or supported lockfile found; skipping."
         exit 0
       fi
       echo "$resolved"
@@ -60,12 +110,9 @@ resolve_task_manager() {
       fi
       echo make
       ;;
-    node)
-      if ! has_package_json; then
-        echo "ci-task: task-manager is node but package.json not found." >&2
-        exit 1
-      fi
-      echo node
+    npm | pnpm | yarn | bun)
+      validate_node_task_manager "$input"
+      echo "$input"
       ;;
   esac
 }
@@ -74,15 +121,15 @@ run_make() {
   make "$TASK"
 }
 
-run_node() {
-  local pm="${CI_NODE_PACKAGE_MANAGER:-npm}"
+run_node_package_manager() {
+  local pm="$1"
   "$pm" run "$TASK"
 }
 
 run_resolved() {
   case "$1" in
     make) run_make ;;
-    node) run_node ;;
+    npm | pnpm | yarn | bun) run_node_package_manager "$1" ;;
     *)
       echo "ci-task: internal error — unknown task-manager '$1'." >&2
       exit 1

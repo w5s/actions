@@ -1,11 +1,11 @@
 name: 'CI task'
-description: 'Run a named task via Make or Node (package manager), with auto-detection'
+description: 'Run a named task via Make or a specific Node package manager, with auto-detection'
 inputs:
   task:
     description: 'Task name: Make target and/or npm/pnpm/yarn script (e.g. validate, build, test).'
     required: true
   task-manager:
-    description: 'Which runner to use: make (make <task>), node (<pm> run <task>), or auto (detect from Makefile vs package.json; Makefile wins when both exist).'
+    description: 'Which runner to use: make, npm, pnpm, yarn, bun, or auto (detect from Makefile first, then from the lockfile; make wins when both exist).'
     required: false
     default: 'auto'
   github-token:
