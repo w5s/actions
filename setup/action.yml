@@ -28,7 +28,7 @@ inputs:
 outputs:
   resolved-node-version:
     description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
-    value: ${{ steps.resolve-node-version.outputs.resolved-node-version }}
+    value: ${{ steps.resolve-node-version.outputs.resolved-version }}
 runs:
   using: 'composite'
   steps:
@@ -45,26 +45,10 @@ runs:
 
     - name: ⚙️ Set Node version (if node-version is set)
       id: resolve-node-version
-      shell: bash
-      run: |
-        requested="${{ inputs.node-version }}"
-        asdf plugin add nodejs || true
-        if [[ "$requested" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-          resolved="$requested"
-        elif [[ "$requested" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-          resolved="$(asdf latest nodejs "$requested" 2>/dev/null || true)"
-          resolved="$(echo "$resolved" | tr -d '[:space:]')"
-          if [[ -z "$resolved" || ! "$resolved" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Could not resolve Node.js version selector $requested"
-            exit 1
-          fi
-        else
-          echo "Invalid node-version input: $requested. Expected major-only (e.g. 24), major.minor (e.g. 24.14), or exact semver (e.g. 24.14.0)."
-          exit 1
-        fi
-        echo "Resolved Node.js version: $resolved"
-
-        asdf set nodejs "$resolved"
+      uses: w5s/actions/setup-asdf-tool@main
+      with:
+        tool: nodejs
+        version: ${{ inputs.node-version }}
       if: inputs.node-version != ''
 
     - name: ⚙️ Install asdf plugins

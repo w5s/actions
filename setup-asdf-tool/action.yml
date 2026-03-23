@@ -1,0 +1,23 @@
+name: 'Setup asdf tool'
+description: 'Resolve an asdf tool version selector and apply it with asdf set'
+inputs:
+  tool:
+    description: 'asdf tool/plugin name (for example: nodejs, python, ruby).'
+    required: true
+  version:
+    description: 'Tool version selector to resolve. Accepts major-only (for example: 24), major.minor (for example: 24.14), or exact semver (for example: 24.14.0).'
+    required: true
+outputs:
+  resolved-version:
+    description: 'Exact tool version resolved and applied with asdf set.'
+    value: ${{ steps.setup-asdf-tool.outputs.resolved-version }}
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Resolve and set tool version
+      id: setup-asdf-tool
+      shell: bash
+      env:
+        CI_ASDF_TOOL: ${{ inputs.tool }}
+        CI_ASDF_TOOL_VERSION: ${{ inputs.version }}
+      run: bash "${{ github.action_path }}/main.sh"
