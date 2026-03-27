@@ -15,5 +15,11 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: 🛠️ Setup
         uses: ./setup
-      - run: make build
-      - run: make validate
+      - name: 🔨 Build
+        uses: ./task
+        with:
+          task: build
+      - name: 🔍 Validate
+        uses: ./task
+        with:
+          task: validate
