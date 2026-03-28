@@ -41,24 +41,24 @@ runs:
 
     - name: ⚙️ Setup asdf tools
       id: setup-asdf
-      uses: ./setup-asdf
+      uses: w5s/actions/setup-asdf@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
       with:
         node-version: ${{ inputs.node-version }}
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     # Always restore npm cache
-    - uses: ./cache-npm
+    - uses: w5s/actions/cache-npm@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('package-lock.json') != '')
 
     - name: ⚙️ Setup Node package manager
-      uses: ./setup-corepack
+      uses: w5s/actions/setup-corepack@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
       if: hashFiles('package.json') != ''
 
-    - uses: ./cache-yarn
+    - uses: w5s/actions/cache-yarn@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('yarn.lock') != '')
-    - uses: ./cache-pnpm
+    - uses: w5s/actions/cache-pnpm@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('pnpm-lock.yaml') != '')
-    - uses: ./cache-bun
+    - uses: w5s/actions/cache-bun@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('bun.lockb') != '')
 
     - name: 🔧 Configure npm for GitHub Packages

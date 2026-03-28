@@ -7,7 +7,7 @@ inputs:
 outputs:
   resolved-node-version:
     description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
-    value: ${{ steps.resolve-node-version.outputs.resolved-version }}
+    value: ${{ steps.resolve-node-version.outputs.resolved-node-version }}
 runs:
   using: 'composite'
   steps:
@@ -16,11 +16,10 @@ runs:
 
     - name: ⚙️ Set Node version (if node-version is set)
       id: resolve-node-version
-      shell: bash
-      env:
-        CI_ASDF_TOOL: nodejs
-        CI_ASDF_TOOL_VERSION: ${{ inputs.node-version }}
-      run: bash "${{ github.action_path }}/../setup-asdf-tool/main.sh"
+      uses: w5s/actions/setup-asdf-tool@0296f832b62ab8f820ca8e236173b44bd587b2d0 # main
+      with:
+        tool: nodejs
+        version: ${{ inputs.node-version }}
       if: inputs.node-version != ''
 
     - name: ⚙️ Install asdf plugins
