@@ -16,7 +16,7 @@ runs:
 
     - name: ⚙️ Set Node version (if node-version is set)
       id: resolve-node-version
-      uses: w5s/actions/setup-asdf-tool@${{ github.action_ref }}
+      uses: w5s/actions/setup-asdf-tool@main
       with:
         tool: nodejs
         version: ${{ inputs.node-version }}
