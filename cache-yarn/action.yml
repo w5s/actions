@@ -7,6 +7,10 @@ inputs:
   cache-path:
     description: 'Yarn cache directory path'
     required: false
+  nm-mode:
+    description: 'Yarn nm mode. Default is "hardlinks-local".' # Reduce node_modules size
+    required: false
+    default: 'hardlinks-local'
 runs:
   using: 'composite'
   steps:
@@ -19,6 +23,7 @@ runs:
         else
           YARN_CACHE_FOLDER="$HOME/.yarn/cache"
         fi
+        echo "YARN_NM_MODE=${{ inputs.nm-mode }}" >> "$GITHUB_ENV"
         echo "YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER" >> "$GITHUB_ENV"
         echo "YARN_ENABLE_GLOBAL_CACHE=false" >> "$GITHUB_ENV"
 

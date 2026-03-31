@@ -25,6 +25,7 @@ Run after checkout; run before any yarn install command.
 ## Inputs
 
 - `cache-path` (optional): yarn cache directory to store/restore. Defaults to `~/.cache/yarn`.
+- `nm-mode` (optional): Yarn nm mode. Default is `"hardlinks-local"`.
 
 ## Requirements
 
