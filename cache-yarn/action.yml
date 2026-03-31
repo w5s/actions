@@ -13,8 +13,10 @@ runs:
   steps:
     - name: ⚙️ Configure yarn cache path
       shell: bash
+      # set YARN_CACHE_FOLDER and YARN_ENABLE_GLOBAL_CACHE environment variables for the rest of the job
       run: |
         echo "YARN_CACHE_FOLDER=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+        echo "YARN_ENABLE_GLOBAL_CACHE=false" >> "$GITHUB_ENV"
       if: inputs.cache-path != ''
 
     - name: 📦 Cache yarn
