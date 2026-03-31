@@ -7,21 +7,25 @@ inputs:
   cache-path:
     description: 'pnpm store directory path'
     required: false
-    default: ~/.pnpm-store
 runs:
   using: 'composite'
   steps:
     - name: ⚙️ Configure pnpm store path
       shell: bash
       run: |
-        pnpm config set store-dir "${{ inputs.cache-path }}"
-      if: inputs.cache-path != ''
+        if [ -n "${{ inputs.cache-path }}" ]; then
+          PNPM_STORE_DIR="${{ inputs.cache-path }}"
+        else
+          PNPM_STORE_DIR="$HOME/.pnpm-store"
+        fi
+        echo "PNPM_STORE_DIR=$PNPM_STORE_DIR" >> "$GITHUB_ENV"
+        pnpm config set store-dir "$PNPM_STORE_DIR"
 
     - name: 📦 Cache pnpm
       uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
       with:
-        path: ${{ inputs.cache-path }}
+        path: ${{ env.PNPM_STORE_DIR }}
         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && inputs.cache-path != '' && hashFiles('**/pnpm-lock.yaml') != ''))
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))

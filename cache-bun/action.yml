@@ -7,21 +7,24 @@ inputs:
   cache-path:
     description: 'Bun cache directory path'
     required: false
-    default: ~/.bun/install/cache
 runs:
   using: 'composite'
   steps:
     - name: ⚙️ Configure bun cache path
       shell: bash
       run: |
-        echo "BUN_INSTALL_CACHE_DIR=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
-      if: inputs.cache-path != ''
+        if [ -n "${{ inputs.cache-path }}" ]; then
+          BUN_INSTALL_CACHE_DIR="${{ inputs.cache-path }}"
+        else
+          BUN_INSTALL_CACHE_DIR="$HOME/.bun/install/cache"
+        fi
+        echo "BUN_INSTALL_CACHE_DIR=$BUN_INSTALL_CACHE_DIR" >> "$GITHUB_ENV"
 
     - name: 📦 Cache bun
       uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
       with:
-        path: ${{ inputs.cache-path }}
+        path: ${{ env.BUN_INSTALL_CACHE_DIR }}
         key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock', '**/bun.lockb') }}
         restore-keys: |
           ${{ runner.os }}-bun-
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && inputs.cache-path != '' && (hashFiles('**/bun.lock') != '' || hashFiles('**/bun.lockb') != '')))
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && (hashFiles('**/bun.lock') != '' || hashFiles('**/bun.lockb') != '')))

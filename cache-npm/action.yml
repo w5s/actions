@@ -7,22 +7,25 @@ inputs:
   cache-path:
     description: 'NPM cache directory path'
     required: false
-    default: ~/.npm
 runs:
   using: 'composite'
   steps:
     - name: ⚙️ Configure npm cache path
       shell: bash
       run: |
-        echo "NPM_CONFIG_CACHE=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
-        echo "npm_config_cache=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
-      if: inputs.cache-path != ''
+        if [ -n "${{ inputs.cache-path }}" ]; then
+          NPM_CONFIG_CACHE="${{ inputs.cache-path }}"
+        else
+          NPM_CONFIG_CACHE="$HOME/.npm"
+        fi
+        echo "NPM_CONFIG_CACHE=$NPM_CONFIG_CACHE" >> "$GITHUB_ENV"
+        echo "npm_config_cache=$NPM_CONFIG_CACHE" >> "$GITHUB_ENV"
 
     - name: 📦 Cache npm
       uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
       with:
-        path: ${{ inputs.cache-path }}
+        path: ${{ env.NPM_CONFIG_CACHE }}
         key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-npm-
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && inputs.cache-path != '' && hashFiles('**/package-lock.json') != ''))
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/package-lock.json') != ''))

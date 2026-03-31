@@ -7,7 +7,6 @@ inputs:
   cache-path:
     description: 'Yarn cache directory path'
     required: false
-    default: ~/.cache/yarn
 runs:
   using: 'composite'
   steps:
@@ -15,15 +14,19 @@ runs:
       shell: bash
       # set YARN_CACHE_FOLDER and YARN_ENABLE_GLOBAL_CACHE environment variables for the rest of the job
       run: |
-        echo "YARN_CACHE_FOLDER=${{ inputs.cache-path }}" >> "$GITHUB_ENV"
+        if [ -n "${{ inputs.cache-path }}" ]; then
+          YARN_CACHE_FOLDER="${{ inputs.cache-path }}"
+        else
+          YARN_CACHE_FOLDER="$HOME/.yarn/cache"
+        fi
+        echo "YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER" >> "$GITHUB_ENV"
         echo "YARN_ENABLE_GLOBAL_CACHE=false" >> "$GITHUB_ENV"
-      if: inputs.cache-path != ''
 
     - name: 📦 Cache yarn
       uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
       with:
-        path: ${{ inputs.cache-path }}
+        path: ${{ env.YARN_CACHE_FOLDER }}
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && inputs.cache-path != '' && hashFiles('**/yarn.lock') != ''))
+      if: (inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false' && hashFiles('**/yarn.lock') != ''))
