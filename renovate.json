@@ -8,5 +8,6 @@
       ],
       "pinDigests": false
     }
-  ]
+  ],
+  "schedule": ["* * * * 0,6"]
 }
