@@ -61,6 +61,7 @@ runs:
     - uses: w5s/actions/cache-bun@main
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && hashFiles('bun.lockb') != '')
 
+
     - name: 🔧 Configure npm for GitHub Packages
       shell: bash
       run: npm config set "//npm.pkg.github.com/:_authToken=${{ inputs.github-token }}" --location=user
@@ -88,6 +89,11 @@ runs:
           nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-${{ steps.nx-set-shas.outputs.base }}
           nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-
       if: steps.nx-set-shas.outcome == 'success' && (inputs.nx-cache == 'true' || (inputs.nx-cache != 'false' && hashFiles('nx.json') != ''))
+
+    - name: ⚙️ Setup Playwright cache
+      uses: w5s/actions/cache-playwright@main
+      if: inputs.node-cache == 'true' || (inputs.node-cache != 'false')
+
 
     - name: ℹ️ Package manager information
       shell: bash
