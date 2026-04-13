@@ -1,0 +1,30 @@
+name: 'Cache Playwright'
+description: 'Cache Playwright browsers'
+inputs:
+  cache-enabled:
+    description: 'Playwright browser cache enabled. If unset, the cache is enabled when package.json exists.'
+    required: false
+  cache-path:
+    description: 'Playwright browser cache directory path'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Configure Playwright cache path
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.cache-path }}" ]; then
+          PLAYWRIGHT_BROWSERS_PATH="${{ inputs.cache-path }}"
+        else
+          PLAYWRIGHT_BROWSERS_PATH="$HOME/.cache/ms-playwright"
+        fi
+        echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+
+    - name: 📦 Cache Playwright browsers
+      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+      with:
+        path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml', '**/yarn.lock', '**/bun.lock', '**/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
+      if: inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false')
