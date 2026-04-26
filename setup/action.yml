@@ -67,7 +67,7 @@ runs:
       if: inputs.github-token != ''
 
     - name: ⚙️ Setup Turbo cache
-      uses: rharkor/caching-for-turbo@a1c4079258ae08389be75b57d4d7a70f23c1c66d # v1.8
+      uses: rharkor/caching-for-turbo@56219402aacc0d06b650d898c222996dbc1191ec # v2.3.14
       if: inputs.turbo-cache == 'true' || (inputs.turbo-cache != 'false' && hashFiles('turbo.json') != '')
 
     - name: ⚙️ Setup Nx
