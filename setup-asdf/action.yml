@@ -1,13 +1,25 @@
 name: 'Setup asdf tools'
-description: 'Setup asdf, optionally resolve Node.js version, and install tools'
+description: 'Setup asdf, optionally resolve tool versions, and install tools'
 inputs:
   node-version:
     description: 'Node.js version to set with asdf before install; supports major-only (e.g. 24), major.minor (e.g. 24.14), or exact semver (e.g. 24.14.0).'
     required: false
+  python-version:
+    description: 'Python version to set with asdf before install; supports major-only (e.g. 3), major.minor (e.g. 3.13), or exact semver (e.g. 3.13.1).'
+    required: false
+  ruby-version:
+    description: 'Ruby version to set with asdf before install; supports major-only (e.g. 3), major.minor (e.g. 3.4), or exact semver (e.g. 3.4.1).'
+    required: false
 outputs:
   resolved-node-version:
     description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
-    value: ${{ steps.resolve-node-version.outputs.resolved-node-version }}
+    value: ${{ steps.resolve-node-version.outputs.resolved-version }}
+  resolved-python-version:
+    description: 'Exact Python version resolved and installed by asdf when python-version input is set.'
+    value: ${{ steps.resolve-python-version.outputs.resolved-version }}
+  resolved-ruby-version:
+    description: 'Exact Ruby version resolved and installed by asdf when ruby-version input is set.'
+    value: ${{ steps.resolve-ruby-version.outputs.resolved-version }}
 runs:
   using: 'composite'
   steps:
@@ -27,7 +39,7 @@ runs:
       uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
       with:
         path: ${{ steps.asdf-env.outputs.ASDF_DATA_DIR }}
-        key: ${{ runner.os }}-${{ runner.arch }}-asdf-${{ hashFiles('.tool-versions') }}${{ inputs.node-version }}
+        key: ${{ runner.os }}-${{ runner.arch }}-asdf-${{ hashFiles('.tool-versions') }}${{ inputs.node-version }}${{ inputs.python-version }}${{ inputs.ruby-version }}
         restore-keys: |
           ${{ runner.os }}-${{ runner.arch }}-asdf-
 
@@ -41,6 +53,22 @@ runs:
         tool: nodejs
         version: ${{ inputs.node-version }}
       if: inputs.node-version != ''
+
+    - name: ⚙️ Set Python version (if python-version is set)
+      id: resolve-python-version
+      uses: w5s/actions/setup-asdf-tool@main
+      with:
+        tool: python
+        version: ${{ inputs.python-version }}
+      if: inputs.python-version != ''
+
+    - name: ⚙️ Set Ruby version (if ruby-version is set)
+      id: resolve-ruby-version
+      uses: w5s/actions/setup-asdf-tool@main
+      with:
+        tool: ruby
+        version: ${{ inputs.ruby-version }}
+      if: inputs.ruby-version != ''
 
     - name: ⚙️ Install asdf plugins
       uses: asdf-vm/actions/plugins-add@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4
