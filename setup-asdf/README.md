@@ -1,6 +1,6 @@
 # Setup asdf tools
 
-Composite action to configure asdf, optionally resolve and set Node.js, Python, and Ruby versions, then install tools.
+Composite action to configure asdf, optionally resolve and set Node.js, Python, and Ruby versions, install system dependencies for missing plugins, then install tools.
 
 ## Usage
 
@@ -42,3 +42,4 @@ Composite action to configure asdf, optionally resolve and set Node.js, Python, 
 
 - Job must run after `actions/checkout`.
 - `.tool-versions` and/or at least one version input must be present to do meaningful work.
+- On Debian/Ubuntu runners, Python and Ruby plugin installs automatically install their required `apt` packages the first time those plugins are added.

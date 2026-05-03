@@ -4,21 +4,6 @@ set -euo pipefail
 
 APT_UPDATED=false
 
-has_tool_requirement() {
-  local tool="$1"
-  local version="${2:-}"
-
-  if [[ -n "$version" ]]; then
-    return 0
-  fi
-
-  if [[ -f .tool-versions ]] && grep -Eq "^[[:space:]]*${tool}[[:space:]]+" .tool-versions; then
-    return 0
-  fi
-
-  return 1
-}
-
 install_apt_packages() {
   if ! command -v apt-get >/dev/null 2>&1; then
     echo 'apt-get is not available. Skipping apt dependencies.'
@@ -33,21 +18,32 @@ install_apt_packages() {
   sudo apt-get install -y "$@"
 }
 
-setup_python_requirements() {
-  if ! has_tool_requirement python "${CI_ASDF_PYTHON_VERSION:-}"; then
-    echo 'No Python requirement found. Skipping Python build dependencies.'
-    return 0
+main() {
+  local plugin="${1:-}"
+
+  if [[ -z "$plugin" ]]; then
+    echo 'Usage: setup-requirements.sh <asdf-plugin>'
+    exit 1
   fi
 
-  echo 'Python requirement found. Installing Python build dependencies.'
-  install_apt_packages make build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-    libffi-dev liblzma-dev
-}
-
-main() {
-  setup_python_requirements
+  case "$plugin" in
+    python)
+      echo 'Installing Python build dependencies.'
+      install_apt_packages make build-essential libssl-dev zlib1g-dev \
+        libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+        libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
+        libffi-dev liblzma-dev
+      ;;
+    ruby)
+      echo 'Installing Ruby build dependencies.'
+      install_apt_packages autoconf patch build-essential rustc libssl-dev \
+        libyaml-dev zlib1g-dev libgmp-dev libreadline-dev libncurses5-dev \
+        libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+      ;;
+    *)
+      echo "No additional system dependencies configured for plugin: $plugin"
+      ;;
+  esac
 }
 
 main "$@"
