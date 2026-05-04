@@ -1,0 +1,117 @@
+name: 'Cache Node package managers'
+description: 'Setup cache for bun, npm, pnpm, and yarn'
+inputs:
+  bun-cache-enabled:
+    description: 'Bun cache enabled. If unset, the cache will be enabled if a bun.lock or bun.lockb file is found.'
+    required: false
+  bun-cache-path:
+    description: 'Bun cache directory path'
+    required: false
+  npm-cache-enabled:
+    description: 'NPM cache enabled. If unset, the cache will be enabled if a package-lock.json file is found.'
+    required: false
+  npm-cache-path:
+    description: 'NPM cache directory path'
+    required: false
+  pnpm-cache-enabled:
+    description: 'pnpm cache enabled. If unset, the cache will be enabled if a pnpm-lock.yaml file is found.'
+    required: false
+  pnpm-cache-path:
+    description: 'pnpm store directory path'
+    required: false
+  yarn-cache-enabled:
+    description: 'Yarn cache enabled. If unset, the cache will be enabled if a yarn.lock file is found.'
+    required: false
+  yarn-cache-path:
+    description: 'Yarn cache directory path'
+    required: false
+  yarn-nm-mode:
+    description: 'Yarn nm mode. Default is "hardlinks-local".'
+    required: false
+    default: 'hardlinks-local'
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Configure bun cache path
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.bun-cache-path }}" ]; then
+          BUN_INSTALL_CACHE_DIR="${{ inputs.bun-cache-path }}"
+        else
+          BUN_INSTALL_CACHE_DIR="$HOME/.bun/install/cache"
+        fi
+        echo "BUN_INSTALL_CACHE_DIR=$BUN_INSTALL_CACHE_DIR" >> "$GITHUB_ENV"
+      if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles('**/bun.lock') != '' || hashFiles('**/bun.lockb') != ''))
+
+    - name: 📦 Cache bun
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      with:
+        path: ${{ env.BUN_INSTALL_CACHE_DIR }}
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock', '**/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+      if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles('**/bun.lock') != '' || hashFiles('**/bun.lockb') != ''))
+
+    - name: ⚙️ Configure npm cache path
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.npm-cache-path }}" ]; then
+          NPM_CONFIG_CACHE="${{ inputs.npm-cache-path }}"
+        else
+          NPM_CONFIG_CACHE="$HOME/.npm"
+        fi
+        echo "NPM_CONFIG_CACHE=$NPM_CONFIG_CACHE" >> "$GITHUB_ENV"
+        echo "npm_config_cache=$NPM_CONFIG_CACHE" >> "$GITHUB_ENV"
+      if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles('**/package-lock.json') != '')
+
+    - name: 📦 Cache npm
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      with:
+        path: ${{ env.NPM_CONFIG_CACHE }}
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+      if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles('**/package-lock.json') != '')
+
+    - name: ⚙️ Configure pnpm store path
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.pnpm-cache-path }}" ]; then
+          PNPM_STORE_DIR="${{ inputs.pnpm-cache-path }}"
+        else
+          PNPM_STORE_DIR="$HOME/.pnpm-store"
+        fi
+        echo "PNPM_STORE_DIR=$PNPM_STORE_DIR" >> "$GITHUB_ENV"
+        pnpm config set store-dir "$PNPM_STORE_DIR"
+      if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
+
+    - name: 📦 Cache pnpm
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      with:
+        path: ${{ env.PNPM_STORE_DIR }}
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+      if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
+
+    - name: ⚙️ Configure yarn cache path
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.yarn-cache-path }}" ]; then
+          YARN_CACHE_FOLDER="${{ inputs.yarn-cache-path }}"
+        else
+          YARN_CACHE_FOLDER="$HOME/.yarn/cache"
+        fi
+        echo "YARN_NM_MODE=${{ inputs.yarn-nm-mode }}" >> "$GITHUB_ENV"
+        echo "YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER" >> "$GITHUB_ENV"
+        echo "YARN_ENABLE_GLOBAL_CACHE=false" >> "$GITHUB_ENV"
+      if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles('**/yarn.lock') != '')
+
+    - name: 📦 Cache yarn
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      with:
+        path: ${{ env.YARN_CACHE_FOLDER }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+      if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles('**/yarn.lock') != '')
