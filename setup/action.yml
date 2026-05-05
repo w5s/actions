@@ -1,6 +1,12 @@
 name: 'CI setup'
 description: 'Checkout, Turbo cache, asdf/Node, corepack'
 inputs:
+  asdf-include:
+    description: 'Comma-separated list of tools to include in the asdf setup. When unset, all tools in .tool-versions are included.'
+    required: false
+  asdf-exclude:
+    description: 'Comma-separated list of tools to exclude from the asdf setup. When unset, no tools are excluded.'
+    required: false
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
     required: false
@@ -44,6 +50,8 @@ runs:
       uses: w5s/actions/setup-asdf@main
       with:
         node-version: ${{ inputs.node-version }}
+        include: ${{ inputs.asdf-include }}
+        exclude: ${{ inputs.asdf-exclude }}
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     - name: ⚙️ Setup Node package manager cache
