@@ -74,30 +74,32 @@ runs:
         if [[ -f .tool-versions ]]; then
           echo "Original .tool-versions:"
           cat .tool-versions
-
           # Convert comma-separated include/exclude lists to arrays
           IFS=',' read -ra INCLUDE_TOOLS <<< "${{ inputs.include }}"
           IFS=',' read -ra EXCLUDE_TOOLS <<< "${{ inputs.exclude }}"
-
           # Filter .tool-versions based on include/exclude lists
-          awk -v include="${{ inputs.include }}" -v exclude="${{ inputs.exclude }}" '
+          awk -v include_filter="${{ inputs.include }}" -v exclude_filter="${{ inputs.exclude }}" '
             BEGIN {
-              split(include, include_arr, ",");
-              split(exclude, exclude_arr, ",");
-              for (i in include_arr) include_map[include_arr[i]] = 1;
-              for (i in exclude_arr) exclude_map[exclude_arr[i]] = 1;
+              split(include_filter, include_arr, ",");
+              split(exclude_filter, exclude_arr, ",");
+              for (i in include_arr) {
+                if (length(include_arr[i]) > 0) include_map[include_arr[i]] = 1;
+              }
+              for (i in exclude_arr) {
+                if (length(exclude_arr[i]) > 0) exclude_map[exclude_arr[i]] = 1;
+              }
             }
             {
               tool = $1;
-              if ((length(include) == 0 || tool in include_map) && !(tool in exclude_map)) {
+              include_ok = (length(include_filter) == 0 || (tool in include_map));
+              exclude_hit = (tool in exclude_map);
+              if (include_ok && !exclude_hit) {
                 print $0;
               }
             }
           ' .tool-versions > .tool-versions.filtered
-
           echo "Filtered .tool-versions:"
           cat .tool-versions.filtered
-
           mv .tool-versions.filtered .tool-versions
         else
           echo "No .tool-versions file found, skipping filtering."
