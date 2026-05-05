@@ -29,18 +29,6 @@ collect_plugins() {
       append_plugin "$plugin"
     done <"$TOOL_VERSIONS_FILE"
   fi
-
-  if [[ -n "${CI_ASDF_NODE_VERSION:-}" ]]; then
-    append_plugin "nodejs"
-  fi
-
-  if [[ -n "${CI_ASDF_PYTHON_VERSION:-}" ]]; then
-    append_plugin "python"
-  fi
-
-  if [[ -n "${CI_ASDF_RUBY_VERSION:-}" ]]; then
-    append_plugin "ruby"
-  fi
 }
 
 plugin_is_installed() {

@@ -75,10 +75,6 @@ runs:
 
     - name: ⚙️ Setup requirements for missing plugins
       shell: bash
-      env:
-        CI_ASDF_NODE_VERSION: ${{ inputs.node-version }}
-        CI_ASDF_PYTHON_VERSION: ${{ inputs.python-version }}
-        CI_ASDF_RUBY_VERSION: ${{ inputs.ruby-version }}
       run: bash "${{ github.action_path }}/setup-install-requirements.sh"
 
     - name: ⚙️ Install tools
