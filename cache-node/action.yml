@@ -82,7 +82,6 @@ runs:
           PNPM_STORE_DIR="$HOME/.pnpm-store"
         fi
         echo "PNPM_STORE_DIR=$PNPM_STORE_DIR" >> "$GITHUB_ENV"
-        pnpm config set store-dir "$PNPM_STORE_DIR"
       if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
 
     - name: 📦 Cache pnpm
