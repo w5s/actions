@@ -8,8 +8,8 @@ runs:
       run: |
         package_manager=$(jq -r '.packageManager // empty' package.json)
         if [ -n "$package_manager" ]; then
-          # Install corepack if not found
-          if ! command -v corepack >/dev/null 2>&1; then
+          # Install corepack if not working
+          if ! corepack -v >/dev/null 2>&1; then
             npm install -g corepack
           fi
 
