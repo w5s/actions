@@ -495,12 +495,12 @@ packages:
       '@commitlint/cli':
         optional: true
 
-  '@w5s/conventional-changelog@3.1.6':
-    resolution: {integrity: sha512-MLjJbo94qUjK+bLw956fqJQo8EnSzZCNo3JINH77LvogfAp//jvSHoU26k382BLroxybxc321Um+Jwv4DTzt7A==}
+  '@w5s/conventional-changelog@3.1.7':
+    resolution: {integrity: sha512-e9gzICJvboOw6zv+Q1fDlNIhb4lcomOUs/VWGMvJbvw3LeuU2AWm9mm3FgmHqEj6hUW1GV8E80dbfTcQB7tmPA==}
     engines: {node: '>=22.0.0'}
 
-  '@w5s/dev@3.3.2':
-    resolution: {integrity: sha512-EbABklMuZJGf3Ei53T69uJrh5+gP+XKAfcEiUbLfCEXVP/NT7/91A5iom9sIjoMrs6WRvDejt9Y7EAMex5hgnA==}
+  '@w5s/dev@3.3.3':
+    resolution: {integrity: sha512-hYrXoXraz9ZvXxZmGvutQQvksEkwP+hSUR4SyU+jIw148hNfH2hXDsHKcRic8P3tN6rFn71jU+m7Av526znr8w==}
     engines: {node: '>=22.0.0'}
 
   '@w5s/eslint-config@3.5.4':
@@ -515,8 +515,8 @@ packages:
       typescript:
         optional: true
 
-  '@w5s/prettier-config@3.1.6':
-    resolution: {integrity: sha512-lmCoAL0BiPcbjlvn3UnwGEkRBb4P93OprMZ3V/OIVWr84Iya1jnxQFgpj2tNc9ePRPDrYhj3bJ6hDPEte1E6Vg==}
+  '@w5s/prettier-config@3.1.7':
+    resolution: {integrity: sha512-wRA1Ixun8YP/HEjHGhivBYaC+1aQmMOQOoLsN6EZ7eq4EaualOCyQPi1N+IxkygHJ7Cs6ePHWWaAqm20qepJLw==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       prettier: 2.x || 3.x
@@ -587,8 +587,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  baseline-browser-mapping@2.10.33:
-    resolution: {integrity: sha512-bA6+tcSLpz2tIEdDXZPpPTIuxBcC4+w6SieaYyfigIa4h8GlFxbA17v22Vx3JUtuZQj9SgOsnbK+aTBzyDyEuw==}
+  baseline-browser-mapping@2.10.34:
+    resolution: {integrity: sha512-IMDedajPifLnHNY0X9n8hKxRTQ6/eTHwr5bDo04WnuqxyKw6LYtQywCuuqPZwhl3aBXMvQpJov42GLCwRRdQzw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -2342,15 +2342,15 @@ snapshots:
   '@w5s/commitlint-config@3.1.4':
     dependencies:
       '@commitlint/types': 20.5.0
-      '@w5s/conventional-changelog': 3.1.6
+      '@w5s/conventional-changelog': 3.1.7
 
-  '@w5s/conventional-changelog@3.1.6':
+  '@w5s/conventional-changelog@3.1.7':
     dependencies:
       '@commitlint/types': 21.0.1
       emoji-regex: 10.6.0
       gitmojis: 3.15.0
 
-  '@w5s/dev@3.3.2':
+  '@w5s/dev@3.3.3':
     dependencies:
       '@types/eslint': 9.6.1
 
@@ -2362,8 +2362,8 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 8.60.1(@typescript-eslint/parser@8.60.1(eslint@10.4.0)(typescript@6.0.3))(eslint@10.4.0)(typescript@6.0.3)
       '@typescript-eslint/parser': 8.60.1(eslint@10.4.0)(typescript@6.0.3)
       '@vitest/eslint-plugin': 1.6.19(@typescript-eslint/eslint-plugin@8.60.1(@typescript-eslint/parser@8.60.1(eslint@10.4.0)(typescript@6.0.3))(eslint@10.4.0)(typescript@6.0.3))(eslint@10.4.0)(typescript@6.0.3)
-      '@w5s/dev': 3.3.2
-      '@w5s/prettier-config': 3.1.6
+      '@w5s/dev': 3.3.3
+      '@w5s/prettier-config': 3.1.7
       eslint-merge-processors: 2.0.0(eslint@10.4.0)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.60.1(eslint@10.4.0)(typescript@6.0.3))(eslint@10.4.0)
       eslint-plugin-jsdoc: 62.9.0(eslint@10.4.0)
@@ -2387,7 +2387,7 @@ snapshots:
       - supports-color
       - vitest
 
-  '@w5s/prettier-config@3.1.6': {}
+  '@w5s/prettier-config@3.1.7': {}
 
   acorn-jsx@5.3.2(acorn@8.16.0):
     dependencies:
@@ -2468,7 +2468,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  baseline-browser-mapping@2.10.33: {}
+  baseline-browser-mapping@2.10.34: {}
 
   brace-expansion@1.1.15:
     dependencies:
@@ -2481,7 +2481,7 @@ snapshots:
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.33
+      baseline-browser-mapping: 2.10.34
       caniuse-lite: 1.0.30001793
       electron-to-chromium: 1.5.368
       node-releases: 2.0.47
