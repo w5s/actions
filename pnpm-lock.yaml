@@ -513,16 +513,16 @@ packages:
       '@commitlint/cli':
         optional: true
 
-  '@w5s/conventional-changelog@3.2.1':
-    resolution: {integrity: sha512-bPLg34+ju+cnex/LvaiRnjW7XqYhAEynTpLz3pQqHWOL0J6E2703xL4lOvigUafGWADowVQd0c7MV6Uyf7Yvbg==}
+  '@w5s/conventional-changelog@3.2.2':
+    resolution: {integrity: sha512-x8iP8gOtFptbgQaTAqrp9hylq2b4US/0VOY7SitrVN3eYA7mO6C70sCrVBBh4AcPAqXd8qUPgdcDfNlgqaEQ6g==}
     engines: {node: '>=22.0.0'}
 
-  '@w5s/dev@3.4.1':
-    resolution: {integrity: sha512-mDgribn0rMIy7JiPVpZ7ZlQD8aaHkgoI18RNhkFAPBmM/PcWMT4Kpz93Vv+/ULso7dILTlG7M5D8oZI/135hoA==}
+  '@w5s/dev@3.4.2':
+    resolution: {integrity: sha512-mR3eawzfJweoGn2w/FiwX2QSrMjIWdZRRG910yJD1WJAzSl4r6hieT124sEdc0EVEhaJYXI8PfxzBS4DEKIJKg==}
     engines: {node: '>=22.0.0'}
 
-  '@w5s/eslint-config-ignore@1.2.1':
-    resolution: {integrity: sha512-jAZdmo0NACDRq0pjdslYU8TX13eQ8J0V95Xn1PveW9S1EUuhXEJK/v4LQTHD6MmqutnQTcI4rc2ZRuvDWPYgQw==}
+  '@w5s/eslint-config-ignore@1.2.2':
+    resolution: {integrity: sha512-Z48+J7C2+SXcCdHx7F9pD5Wbbc6B/ni5J7S5z+cVhphiL2fY+76QhU9XA1UvZMTk8aBCq8TevwN4mEXhn03j9Q==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: 9.x || 10.x
@@ -545,8 +545,8 @@ packages:
       typescript:
         optional: true
 
-  '@w5s/prettier-config@3.1.9':
-    resolution: {integrity: sha512-5Ay9rF+i3Le9oFAmu2L4B3UNZ8c3D1FGjTo9ryty5uwpG//DW4gGYjWbkxUyoVSRAwn/0hKdwQ4uOtX367jvTg==}
+  '@w5s/prettier-config@3.1.10':
+    resolution: {integrity: sha512-O/9P7CxUxMsSOvj9W5sjxpWMyzNy3/fGc0jd4FMYlZcnCOlzh6Rc865N9zo7OhYAqDwyfrg8HjWRSDsnR+B1kA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       prettier: 2.x || 3.x
@@ -2448,19 +2448,19 @@ snapshots:
   '@w5s/commitlint-config@3.1.7':
     dependencies:
       '@commitlint/types': 21.0.1
-      '@w5s/conventional-changelog': 3.2.1
+      '@w5s/conventional-changelog': 3.2.2
 
-  '@w5s/conventional-changelog@3.2.1':
+  '@w5s/conventional-changelog@3.2.2':
     dependencies:
       '@commitlint/types': 21.0.1
       emoji-regex: 10.6.0
       gitmojis: 3.15.0
 
-  '@w5s/dev@3.4.1':
+  '@w5s/dev@3.4.2':
     dependencies:
       '@types/eslint': 9.6.1
 
-  '@w5s/eslint-config-ignore@1.2.1(eslint@10.4.1)(typescript@6.0.3)':
+  '@w5s/eslint-config-ignore@1.2.2(eslint@10.4.1)(typescript@6.0.3)':
     dependencies:
       find-up: 8.0.0
       parse-gitignore: 2.0.0
@@ -2478,9 +2478,9 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 8.61.0(@typescript-eslint/parser@8.61.0(eslint@10.4.1)(typescript@6.0.3))(eslint@10.4.1)(typescript@6.0.3)
       '@typescript-eslint/parser': 8.61.0(eslint@10.4.1)(typescript@6.0.3)
       '@vitest/eslint-plugin': 1.6.20(@typescript-eslint/eslint-plugin@8.61.0(@typescript-eslint/parser@8.61.0(eslint@10.4.1)(typescript@6.0.3))(eslint@10.4.1)(typescript@6.0.3))(eslint@10.4.1)(typescript@6.0.3)
-      '@w5s/dev': 3.4.1
-      '@w5s/eslint-config-ignore': 1.2.1(eslint@10.4.1)(typescript@6.0.3)
-      '@w5s/prettier-config': 3.1.9
+      '@w5s/dev': 3.4.2
+      '@w5s/eslint-config-ignore': 1.2.2(eslint@10.4.1)(typescript@6.0.3)
+      '@w5s/prettier-config': 3.1.10
       eslint-merge-processors: 2.0.0(eslint@10.4.1)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.61.0(eslint@10.4.1)(typescript@6.0.3))(eslint@10.4.1)
       eslint-plugin-jsdoc: 63.0.2(eslint@10.4.1)
@@ -2505,7 +2505,7 @@ snapshots:
       - ts-declaration-location
       - vitest
 
-  '@w5s/prettier-config@3.1.9': {}
+  '@w5s/prettier-config@3.1.10': {}
 
   acorn-jsx@5.3.2(acorn@8.17.0):
     dependencies:
