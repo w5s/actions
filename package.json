@@ -60,7 +60,7 @@
   "devDependencies": {
     "@types/node": "20.19.43",
     "@w5s/commitlint-config": "3.1.7",
-    "@w5s/eslint-config": "3.6.0",
+    "@w5s/eslint-config": "3.7.0",
     "cspell": "10.0.1",
     "eslint": "10.4.1",
     "typescript": "6.0.3"
