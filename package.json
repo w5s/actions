@@ -58,7 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "20.19.41",
+    "@types/node": "20.19.43",
     "@w5s/commitlint-config": "3.1.7",
     "@w5s/eslint-config": "3.6.0",
     "cspell": "10.0.1",
