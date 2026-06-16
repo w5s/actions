@@ -1,0 +1,42 @@
+name: Test Fixtures
+on:
+  merge_group: {}
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture:
+          # - name: bun
+          - name: npm
+          - name: pnpm
+          - name: yarn
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: 🧹 Prepare workspace for fixture
+        shell: bash
+        run: |
+          rm -f package.json pnpm-lock.yaml yarn.lock package-lock.json bun.lock bun.lockb uv.lock pyproject.toml requirements.txt setup.py
+          cp -R "__fixtures__/${{ matrix.fixture.name }}/." .
+
+      - name: 🛠️ Setup
+        uses: ./setup
+
+      - name: 📦 Install dependencies
+        shell: bash
+        run: bash ./install.sh
+
+      - name: ✅ Run fixture verification script
+        shell: bash
+        run: bash ./test.sh

@@ -1,14 +1,41 @@
 name: 'Setup Node package manager'
-description: 'Enable Corepack based on package.json packageManager'
+description: 'Enable Corepack or install Bun based on package.json packageManager'
 runs:
   using: 'composite'
   steps:
-    - name: ⚙️ Install Node package manager
+    - name: ⚙️ Detect Node package manager
+      id: detect-package-manager
       shell: bash
       run: |
-        package_manager=$(jq -r '.packageManager // empty' package.json)
+        package_manager_spec="$(jq -r '.packageManager // empty' package.json)"
+        package_manager=''
+        package_manager_version=''
+
+        if [ -n "$package_manager_spec" ]; then
+          package_manager="${package_manager_spec%%@*}"
+          if [ "$package_manager_spec" = "$package_manager" ]; then
+            package_manager_version=''
+          else
+            package_manager_version="${package_manager_spec#*@}"
+          fi
+        fi
+
+        echo "package_manager=$package_manager" >> "$GITHUB_OUTPUT"
+        echo "package_manager_version=$package_manager_version" >> "$GITHUB_OUTPUT"
+      if: hashFiles('package.json') != ''
+
+    - name: ⚙️ Setup Bun
+      uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+      with:
+        bun-version: ${{ steps.detect-package-manager.outputs.package_manager_version != '' && steps.detect-package-manager.outputs.package_manager_version || 'latest' }}
+      if: steps.detect-package-manager.outputs.package_manager == 'bun'
+
+    - name: ⚙️ Setup Corepack
+      shell: bash
+      run: |
+        package_manager="${{ steps.detect-package-manager.outputs.package_manager }}"
+
         if [ -n "$package_manager" ]; then
-          # Install corepack if not working
           if ! corepack -v >/dev/null 2>&1; then
             npm install -g corepack
           fi
@@ -20,4 +47,4 @@ runs:
             asdf reshim nodejs
           fi
         fi
-      if: hashFiles('package.json') != ''
+      if: steps.detect-package-manager.outputs.package_manager != '' && steps.detect-package-manager.outputs.package_manager != 'bun'
