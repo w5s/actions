@@ -1,0 +1,8 @@
+{
+  "name": "fixture-bun",
+  "private": true,
+  "packageManager": "bun@1.2.17",
+  "dependencies": {
+    "is-number": "7.0.0"
+  }
+}
