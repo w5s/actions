@@ -1,4 +1,4 @@
-name: Make CI
+name: CI
 on:
   merge_group: {}
   push:
@@ -8,7 +8,7 @@ on:
     branches:
       - main
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout
