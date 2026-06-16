@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         fixture:
-          # - name: bun
+          - name: bun
           - name: npm
           - name: pnpm
           - name: yarn
