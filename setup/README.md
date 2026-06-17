@@ -1,12 +1,12 @@
 # CI setup
 
-Checkout is expected to be done before. This composite action configures the runner for Node/JS CI: asdf tools, package manager/cache setup, optional npm auth for GitHub Packages, Turbo cache, and Nx cache.
+Checkout is expected to be done before. This composite action configures the runner for Node/JS CI: tools setup from `.tool-versions`, package manager/cache setup, optional npm auth for GitHub Packages, Turbo cache, and Nx cache.
 
 ## Purpose
 
 - **Turbo cache**: when `turbo.json` exists (or `turbo-cache` is `true`), configures caching for Turborepo.
 - **Nx cache**: when `nx.json` exists (or `nx-cache` is `true`), computes base/head SHAs and restores/saves local `.nx/cache`.
-- **Tools via asdf**: runs `asdf-vm/actions/setup`, uses `w5s/actions/setup-asdf-tool` to resolve `node-version` to an exact Node.js version, applies `asdf set nodejs <resolved>`, then runs `asdf install`.
+- **Tools setup**: runs `w5s/actions/setup-tools` and installs selected tools using official setup actions (`actions/setup-node`, `actions/setup-python`, `ruby/setup-ruby`) with `.tool-versions` as source of truth.
 - **Package manager cache**: when `node-cache` is not `false`, restores/saves npm cache (when `package-lock.json` exists), Yarn cache (when `yarn.lock` exists), pnpm store (when `pnpm-lock.yaml` exists), or Bun cache (when `bun.lockb` exists). Use `node-cache: 'true'` to force enable or `node-cache: 'false'` to disable.
 - **Corepack**: enables Corepack when `package.json` declares `packageManager` (for Yarn/pnpm/Bun) via `w5s/actions/setup-corepack`.
 - **GitHub Packages**: when `github-token` is set (defaults to `github.token`), configures npm for `//npm.pkg.github.com`.
@@ -37,25 +37,21 @@ Use in a job after `actions/checkout`:
 
 ### Inputs
 
-| Input          | Required | Description |
-|----------------|----------|-------------|
-| `node-version` | No       | Node.js version to apply before `asdf install`. Accepts major-only (`24`), major.minor (`24.14`), or exact semver (`24.14.0`). Major/minor resolve to latest patch at runtime via `asdf latest nodejs <selector>`. Invalid formats (e.g. `24.x`) fail. Updates `.tool-versions` so the chosen version is used by subsequent steps. |
-| `github-token` | No       | GitHub token for npm auth (e.g. GitHub Packages). Defaults to `github.token`. When set, configures npm for `//npm.pkg.github.com`. |
-| `node-cache`   | No       | Enable/disable package manager cache (npm, Yarn, pnpm, Bun) from GitHub Actions cache. `true` forces enable for all, `false` disables. Unset: cache runs when the matching lockfile exists (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, or `bun.lockb`). |
-| `turbo-cache`  | No       | Enable/disable Turborepo cache from GitHub Actions cache. `true` forces enable, `false` disables. Unset: enables only when `turbo.json` exists. |
-| `nx-cache`     | No       | Enable/disable Nx local cache from GitHub Actions cache. `true` forces enable, `false` disables. Unset: enables only when `nx.json` exists. |
+- `node-version` (optional): Node.js version override for tools setup. When unset, uses `nodejs` from `.tool-versions`.
+- `github-token` (optional): GitHub token for npm auth (e.g. GitHub Packages). Defaults to `github.token`. When set, configures npm for `//npm.pkg.github.com`.
+- `node-cache` (optional): Enable or disable package manager cache (npm, Yarn, pnpm, Bun) from GitHub Actions cache. `true` forces enable for all, `false` disables. When unset, cache runs when the matching lockfile exists (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, or `bun.lockb`).
+- `turbo-cache` (optional): Enable or disable Turborepo cache from GitHub Actions cache. `true` forces enable, `false` disables. When unset, enables only when `turbo.json` exists.
+- `nx-cache` (optional): Enable or disable Nx local cache from GitHub Actions cache. `true` forces enable, `false` disables. When unset, enables only when `nx.json` exists.
 
 ### Outputs
 
-| Output                  | Description |
-|-------------------------|-------------|
-| `resolved-node-version` | Exact Node.js version resolved and installed when `node-version` is set. |
+- `resolved-node-version`: Exact Node.js version resolved and installed when `node-version` is set.
 
 ## Version Strategy
 
-- CI can keep a major-only matrix (for example `24`, `22`, `20`).
-- Each run resolves majors to the latest available patch at runtime.
-- Re-runs may pick a newer patch and are expected to be non-strictly reproducible by design.
+- CI can keep major-only selectors (for example `24`, `22`, `20`) when using explicit `node-version`.
+- When `node-version` is unset, `.tool-versions` remains the version source.
+- Re-runs may pick newer patches when selectors are non-exact, depending on upstream setup action resolution.
 
 ## Requirements
 

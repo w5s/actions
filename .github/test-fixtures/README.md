@@ -1,10 +1,12 @@
 # Action integration fixtures
 
 This directory contains minimal sample projects used by workflow integration tests.
-Each fixture includes a `test.sh` script that verifies its post-install behavior.
+Each fixture provides a single `test.sh` entrypoint that runs setup/install checks.
 
-- `pnpm/`: Node.js project for validating `setup` + `install` with pnpm.
-- `yarn/`: Node.js project for validating `setup` + `install` with yarn.
-- `bun/`: Node.js project for validating `setup` + `install` with bun.
-- `pip/`: Python project for validating pip installs in fixture verification.
-- `uv/`: Python project for validating `setup` + `install` with uv.
+- `npm/`: Node.js project for validating `setup-tools` + `install` with npm.
+- `pnpm/`: Node.js project for validating `setup-tools` + `install` with pnpm.
+- `yarn/`: Node.js project for validating `setup-tools` + `install` with yarn.
+- `bun/`: Node.js project for validating `setup-tools` + `install` with bun.
+- `node/`: Atomic Node.js fixture validating runtime setup from `.tool-versions`.
+- `python/`: Atomic Python fixture validating runtime setup from `.tool-versions`.
+- `ruby/`: Atomic Ruby fixture validating runtime setup from `.tool-versions`.
