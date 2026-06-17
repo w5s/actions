@@ -2,10 +2,10 @@ name: 'CI setup'
 description: 'Checkout, Turbo cache, tools/Node, corepack'
 inputs:
   asdf-include:
-    description: 'Comma-separated list of tools to include in the tools setup. Supported values: node, python, ruby.'
+    description: 'Comma-separated list of tools to include in the tools setup. Supported values: nodejs, python, ruby.'
     required: false
   asdf-exclude:
-    description: 'Comma-separated list of tools to exclude from the tools setup. Supported values: node, python, ruby.'
+    description: 'Comma-separated list of tools to exclude from the tools setup. Supported values: nodejs, python, ruby.'
     required: false
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'

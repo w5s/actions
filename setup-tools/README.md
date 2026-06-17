@@ -9,7 +9,7 @@ Composite action to setup Node.js, Python, and Ruby with official setup actions 
   uses: w5s/actions/setup-tools@main
   id: setup-tools
   with:
-    include: node,python
+    include: nodejs,python
     # exclude: ruby
     # node-version: 24.14.0
     # python-version: 3.13.3
@@ -24,24 +24,20 @@ Composite action to setup Node.js, Python, and Ruby with official setup actions 
 
 ## Inputs
 
-| Input | Required | Description |
-|-------|----------|-------------|
-| `include` | No | Comma-separated list of tools to include. Supported values: `node`, `python`, `ruby`. When unset, all supported tools are considered. |
-| `exclude` | No | Comma-separated list of tools to exclude. Supported values: `node`, `python`, `ruby`. |
-| `node-version` | No | Node.js version override. When unset, reads `nodejs` from `.tool-versions`. |
-| `python-version` | No | Python version override. When unset, reads `python` from `.tool-versions`. |
-| `ruby-version` | No | Ruby version override. When unset, reads `ruby` from `.tool-versions`. |
+- `include` (optional): Comma-separated list of tools to include. Supported values: `nodejs`, `python`, `ruby`. When unset, all supported tools are considered.
+- `exclude` (optional): Comma-separated list of tools to exclude. Supported values: `nodejs`, `python`, `ruby`.
+- `node-version` (optional): Node.js version override. When unset, reads `nodejs` from `.tool-versions`.
+- `python-version` (optional): Python version override. When unset, reads `python` from `.tool-versions`.
+- `ruby-version` (optional): Ruby version override. When unset, reads `ruby` from `.tool-versions`.
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `resolved-node-version` | Exact Node.js version installed when Node setup runs. |
-| `resolved-python-version` | Exact Python version installed when Python setup runs. |
-| `resolved-ruby-version` | Exact Ruby version installed when Ruby setup runs. |
+- `resolved-node-version`: Exact Node.js version installed when Node setup runs.
+- `resolved-python-version`: Exact Python version installed when Python setup runs.
+- `resolved-ruby-version`: Exact Ruby version installed when Ruby setup runs.
 
 ## Notes
 
 - `.tool-versions` remains the default source for tool versions.
-- `include` and `exclude` accept normalized names (`node`, `python`, `ruby`).
-- `nodejs` in `.tool-versions` maps to `node` internally.
+- `include` and `exclude` use `.tool-versions` tool names (`nodejs`, `python`, `ruby`).
+- `nodejs` is installed through `actions/setup-node`.

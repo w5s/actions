@@ -16,7 +16,7 @@ normalize_tool_name() {
   value="$(echo "$1" | tr '[:upper:]' '[:lower:]')"
   value="$(trim "$value")"
   case "$value" in
-    node|nodejs)
+    nodejs)
       echo "node"
       ;;
     python)
@@ -44,7 +44,7 @@ load_requested_tools() {
   for token in "${TOKENS[@]}"; do
     normalized="$(normalize_tool_name "$token")"
     if [[ -z "$normalized" ]]; then
-      echo "setup-tools: unsupported tool in $list_name list: '$token'. Supported values: node, python, ruby." >&2
+      echo "setup-tools: unsupported tool in $list_name list: '$token'. Supported values: nodejs, python, ruby." >&2
       exit 1
     fi
     case "$normalized" in

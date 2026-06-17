@@ -2,10 +2,10 @@ name: 'Setup tools'
 description: 'Setup Node.js, Python, and Ruby using official setup actions and .tool-versions'
 inputs:
   include:
-    description: 'Comma-separated list of tools to include in the setup. Supported values: node, python, ruby. When unset, all supported tools are considered.'
+    description: 'Comma-separated list of tools to include in the setup. Supported values: nodejs, python, ruby. When unset, all supported tools are considered.'
     required: false
   exclude:
-    description: 'Comma-separated list of tools to exclude from the setup. Supported values: node, python, ruby.'
+    description: 'Comma-separated list of tools to exclude from the setup. Supported values: nodejs, python, ruby.'
     required: false
   node-version:
     description: 'Node.js version to install. When unset, uses nodejs version from .tool-versions.'
