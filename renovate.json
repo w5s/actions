@@ -5,10 +5,17 @@
   "assignees": ["team:maintainers"],
   "packageRules": [
     {
+      "description": "Automerge github actions",
       "matchDepTypes": [
         "action"
       ],
       "pinDigests": false
+    },
+    {
+      "description": "Automerge test fixture dependency updates",
+      "matchFileNames": [".github/test-fixtures/**"],
+      "automerge": true,
+      "platformAutomerge": true
     }
   ],
   "schedule": ["* * * * 0"]
