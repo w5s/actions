@@ -5,8 +5,11 @@ inputs:
     description: 'asdf tool/plugin name (for example: nodejs, python, ruby).'
     required: true
   version:
-    description: 'Tool version selector to resolve. Accepts major-only (for example: 24), major.minor (for example: 24.14), or exact semver (for example: 24.14.0).'
-    required: true
+    description: 'Optional version selector. Accepts major-only (for example: 24), major.minor (for example: 24.14), or exact semver (for example: 24.14.0). When omitted, uses the tool version from .tool-versions.'
+    required: false
+  plugin:
+    description: 'Optional plugin source to use with asdf plugin add <tool> <plugin> (for example plugin name or URL).'
+    required: false
 outputs:
   resolved-version:
     description: 'Exact tool version resolved and applied with asdf set.'
@@ -14,10 +17,40 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - name: ⚙️ Read asdf environment
+      id: asdf-env
+      shell: bash
+      run: echo "ASDF_DATA_DIR=${ASDF_DATA_DIR:-$HOME/.asdf}" >> "$GITHUB_OUTPUT"
+
+    - name: ⚙️ Resolve tool version and cache identity
+      id: resolve
+      shell: bash
+      env:
+        CI_ASDF_TOOL: ${{ inputs.tool }}
+        CI_ASDF_TOOL_VERSION: ${{ inputs.version }}
+        CI_ASDF_PLUGIN_SOURCE: ${{ inputs.plugin }}
+        CI_ASDF_TOOL_ACTION_MODE: resolve
+      run: bash "${{ github.action_path }}/main.sh"
+
+    - name: 📦 Cache asdf plugin (per tool)
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      with:
+        path: ${{ steps.asdf-env.outputs.ASDF_DATA_DIR }}/plugins/${{ inputs.tool }}
+        key: ${{ runner.os }}-${{ runner.arch }}-asdf-plugin-${{ inputs.tool }}-${{ steps.resolve.outputs.plugin-cache-key }}
+
+    - name: 📦 Cache asdf install (per tool version)
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+      with:
+        path: ${{ steps.asdf-env.outputs.ASDF_DATA_DIR }}/installs/${{ inputs.tool }}/${{ steps.resolve.outputs.resolved-version }}
+        key: ${{ runner.os }}-${{ runner.arch }}-asdf-install-${{ inputs.tool }}-${{ steps.resolve.outputs.resolved-version }}
+
     - name: ⚙️ Resolve and set tool version
       id: setup-asdf-tool
       shell: bash
       env:
         CI_ASDF_TOOL: ${{ inputs.tool }}
         CI_ASDF_TOOL_VERSION: ${{ inputs.version }}
+        CI_ASDF_PLUGIN_SOURCE: ${{ inputs.plugin }}
+        CI_ASDF_RESOLVED_VERSION: ${{ steps.resolve.outputs.resolved-version }}
+        CI_ASDF_TOOL_ACTION_MODE: install
       run: bash "${{ github.action_path }}/main.sh"
