@@ -30,8 +30,13 @@ jobs:
           rm -f package.json pnpm-lock.yaml yarn.lock package-lock.json bun.lock bun.lockb uv.lock pyproject.toml requirements.txt setup.py
           cp -R ".github/test-fixtures/${{ matrix.fixture.name }}/." .
 
-      - name: 🛠️ Setup
-        uses: ./setup
+      - name: 🛠️ Setup tools
+        uses: ./setup-tools
+        if: hashFiles('.tool-versions') != ''
+
+      - name: 🛠️ Setup Node package manager
+        uses: ./setup-corepack
+        if: hashFiles('package.json') != ''
 
       - name: 📦 Install dependencies
         shell: bash

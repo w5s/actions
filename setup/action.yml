@@ -1,11 +1,11 @@
 name: 'CI setup'
-description: 'Checkout, Turbo cache, asdf/Node, corepack'
+description: 'Checkout, Turbo cache, tools/Node, corepack'
 inputs:
   asdf-include:
-    description: 'Comma-separated list of tools to include in the asdf setup. When unset, all tools in .tool-versions are included.'
+    description: 'Comma-separated list of tools to include in the tools setup. Supported values: node, python, ruby.'
     required: false
   asdf-exclude:
-    description: 'Comma-separated list of tools to exclude from the asdf setup. When unset, no tools are excluded.'
+    description: 'Comma-separated list of tools to exclude from the tools setup. Supported values: node, python, ruby.'
     required: false
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
@@ -20,7 +20,7 @@ inputs:
     required: false
     default: 'github-actions[bot]@users.noreply.github.com'
   node-version:
-    description: 'Node.js version to set with asdf before install; supports major-only (e.g. 24), major.minor (e.g. 24.14), or exact semver (e.g. 24.14.0).'
+    description: 'Node.js version override for tools setup. When unset, uses nodejs from .tool-versions.'
     required: false
   node-cache:
     description: 'Enable or disable node package manager (npm, pnpm, etc) cache from github actions cache. When unset, cache is enabled based on the presence of the lockfile.'
@@ -33,8 +33,8 @@ inputs:
     required: false
 outputs:
   resolved-node-version:
-    description: 'Exact Node.js version resolved and installed by asdf when node-version input is set.'
-    value: ${{ steps.setup-asdf.outputs.resolved-node-version }}
+    description: 'Exact Node.js version resolved and installed when node-version input is set.'
+    value: ${{ steps.setup-tools.outputs.resolved-node-version }}
 runs:
   using: 'composite'
   steps:
@@ -45,9 +45,9 @@ runs:
         git config user.email "${{ inputs.git-user-email }}"
       if: inputs.git-user-name != '' && inputs.git-user-email != ''
 
-    - name: ⚙️ Setup asdf tools
-      id: setup-asdf
-      uses: w5s/actions/setup-asdf@main
+    - name: ⚙️ Setup tools
+      id: setup-tools
+      uses: ./setup-tools
       with:
         node-version: ${{ inputs.node-version }}
         include: ${{ inputs.asdf-include }}

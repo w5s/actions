@@ -1,0 +1,62 @@
+name: 'Setup tools'
+description: 'Setup Node.js, Python, and Ruby using official setup actions and .tool-versions'
+inputs:
+  include:
+    description: 'Comma-separated list of tools to include in the setup. Supported values: node, python, ruby. When unset, all supported tools are considered.'
+    required: false
+  exclude:
+    description: 'Comma-separated list of tools to exclude from the setup. Supported values: node, python, ruby.'
+    required: false
+  node-version:
+    description: 'Node.js version to install. When unset, uses nodejs version from .tool-versions.'
+    required: false
+  python-version:
+    description: 'Python version to install. When unset, uses python version from .tool-versions.'
+    required: false
+  ruby-version:
+    description: 'Ruby version to install. When unset, uses ruby version from .tool-versions.'
+    required: false
+outputs:
+  resolved-node-version:
+    description: 'Exact Node.js version resolved and installed when node setup runs.'
+    value: ${{ steps.setup-node.outputs.node-version }}
+  resolved-python-version:
+    description: 'Exact Python version resolved and installed when python setup runs.'
+    value: ${{ steps.setup-python.outputs.python-version }}
+  resolved-ruby-version:
+    description: 'Exact Ruby version resolved and installed when ruby setup runs.'
+    value: ${{ steps.setup-ruby.outputs.ruby-version }}
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Resolve selected tools and versions
+      id: resolve
+      shell: bash
+      env:
+        SETUP_TOOLS_INCLUDE: ${{ inputs.include }}
+        SETUP_TOOLS_EXCLUDE: ${{ inputs.exclude }}
+        SETUP_TOOLS_NODE_VERSION: ${{ inputs.node-version }}
+        SETUP_TOOLS_PYTHON_VERSION: ${{ inputs.python-version }}
+        SETUP_TOOLS_RUBY_VERSION: ${{ inputs.ruby-version }}
+      run: bash "${{ github.action_path }}/resolve-tools.sh"
+
+    - name: ⚙️ Setup Node.js
+      id: setup-node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ steps.resolve.outputs.node-version }}
+      if: steps.resolve.outputs.node-enabled == 'true'
+
+    - name: ⚙️ Setup Python
+      id: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ steps.resolve.outputs.python-version }}
+      if: steps.resolve.outputs.python-enabled == 'true'
+
+    - name: ⚙️ Setup Ruby
+      id: setup-ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ steps.resolve.outputs.ruby-version }}
+      if: steps.resolve.outputs.ruby-enabled == 'true'
