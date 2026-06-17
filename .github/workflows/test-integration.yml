@@ -1,4 +1,4 @@
-name: Test Fixtures
+name: Test Integration
 on:
   merge_group: {}
   push:
@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           rm -f package.json pnpm-lock.yaml yarn.lock package-lock.json bun.lock bun.lockb uv.lock pyproject.toml requirements.txt setup.py
-          cp -R "__fixtures__/${{ matrix.fixture.name }}/." .
+          cp -R ".github/test-fixtures/${{ matrix.fixture.name }}/." .
 
       - name: 🛠️ Setup
         uses: ./setup
