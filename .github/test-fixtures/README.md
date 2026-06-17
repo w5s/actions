@@ -7,3 +7,6 @@ Each fixture includes a `test.sh` script that verifies its post-install behavior
 - `pnpm/`: Node.js project for validating `setup-tools` + `install` with pnpm.
 - `yarn/`: Node.js project for validating `setup-tools` + `install` with yarn.
 - `bun/`: Node.js project for validating `setup-tools` + `install` with bun.
+- `node/`: Atomic Node.js fixture validating runtime setup from `.tool-versions`.
+- `python/`: Atomic Python fixture validating runtime setup from `.tool-versions`.
+- `ruby/`: Atomic Ruby fixture validating runtime setup from `.tool-versions`.

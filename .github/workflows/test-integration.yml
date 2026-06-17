@@ -17,8 +17,11 @@ jobs:
       matrix:
         fixture:
           - name: bun
+          - name: node
           - name: npm
+          - name: python
           - name: pnpm
+          - name: ruby
           - name: yarn
     steps:
       - name: ⬇️ Checkout
