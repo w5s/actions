@@ -1,12 +1,6 @@
 name: 'CI setup'
 description: 'Checkout, Turbo cache, tools/Node, corepack'
 inputs:
-  asdf-include:
-    description: 'Comma-separated list of tools to include in the tools setup. Supported values: nodejs, python, ruby.'
-    required: false
-  asdf-exclude:
-    description: 'Comma-separated list of tools to exclude from the tools setup. Supported values: nodejs, python, ruby.'
-    required: false
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
     required: false
@@ -27,6 +21,12 @@ inputs:
     required: false
   nx-cache:
     description: 'Enable or disable Nx cache from github actions cache. When unset, Nx cache runs only if nx.json exists.'
+    required: false
+  tool-include:
+    description: 'Comma-separated list of tools to include in the tools setup. Supported values: nodejs, python, ruby.'
+    required: false
+  tool-exclude:
+    description: 'Comma-separated list of tools to exclude from the tools setup. Supported values: nodejs, python, ruby.'
     required: false
   turbo-cache:
     description: 'Enable or disable TurboRepo cache from github actions cache. When unset, Turbo cache runs only if turbo.json exists.'
@@ -50,8 +50,8 @@ runs:
       uses: w5s/actions/setup-tools@main
       with:
         node-version: ${{ inputs.node-version }}
-        include: ${{ inputs.asdf-include }}
-        exclude: ${{ inputs.asdf-exclude }}
+        include: ${{ inputs.tool-include }}
+        exclude: ${{ inputs.tool-exclude }}
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
     - name: ⚙️ Setup Node package manager cache
