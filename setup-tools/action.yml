@@ -54,7 +54,7 @@ runs:
 
     - name: ⚙️ Setup Python
       id: setup-python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ steps.resolve.outputs.python-version }}
       if: steps.resolve.outputs.python-enabled == 'true'
