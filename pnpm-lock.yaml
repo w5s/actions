@@ -12,8 +12,8 @@ importers:
         specifier: 20.19.43
         version: 20.19.43
       '@w5s/commitlint-config':
-        specifier: 3.1.10
-        version: 3.1.10
+        specifier: 3.1.11
+        version: 3.1.11
       '@w5s/eslint-config':
         specifier: 3.7.3
         version: 3.7.3(eslint@10.5.0)(typescript@6.0.3)
@@ -504,8 +504,8 @@ packages:
       vitest:
         optional: true
 
-  '@w5s/commitlint-config@3.1.10':
-    resolution: {integrity: sha512-7rmsA345viN/NDS9mpoopb49XMlwZz7QSmIYrkkg3V9Op9fZjt7iRvlX2UXJiZzTigik+KKw/GpWOUlWKMzgbQ==}
+  '@w5s/commitlint-config@3.1.11':
+    resolution: {integrity: sha512-f7N4hehES0CXSYI+Ddhh2PNdu004z1PxEkaTdwojs3kaM/wN/zePy/MINSKkJmgbqkkDfyzwswkUfBG2rYwPAQ==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@commitlint/cli': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
@@ -513,8 +513,8 @@ packages:
       '@commitlint/cli':
         optional: true
 
-  '@w5s/conventional-changelog@3.2.2':
-    resolution: {integrity: sha512-x8iP8gOtFptbgQaTAqrp9hylq2b4US/0VOY7SitrVN3eYA7mO6C70sCrVBBh4AcPAqXd8qUPgdcDfNlgqaEQ6g==}
+  '@w5s/conventional-changelog@3.2.3':
+    resolution: {integrity: sha512-nidewABdYPDU0DhRngXpRelmHYrEQlVN+O1L45tbmJfKXZLSFKO6MS+PZ1gC6SVTauenmVQHPjmV6qP5QvVbTQ==}
     engines: {node: '>=22.0.0'}
 
   '@w5s/dev@3.4.3':
@@ -2445,12 +2445,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@w5s/commitlint-config@3.1.10':
+  '@w5s/commitlint-config@3.1.11':
     dependencies:
       '@commitlint/types': 21.0.1
-      '@w5s/conventional-changelog': 3.2.2
+      '@w5s/conventional-changelog': 3.2.3
 
-  '@w5s/conventional-changelog@3.2.2':
+  '@w5s/conventional-changelog@3.2.3':
     dependencies:
       '@commitlint/types': 21.0.1
       emoji-regex: 10.6.0
