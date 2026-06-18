@@ -15,8 +15,8 @@ importers:
         specifier: 3.1.10
         version: 3.1.10
       '@w5s/eslint-config':
-        specifier: 3.7.1
-        version: 3.7.1(eslint@10.5.0)(typescript@6.0.3)
+        specifier: 3.7.3
+        version: 3.7.3(eslint@10.5.0)(typescript@6.0.3)
       cspell:
         specifier: 10.0.1
         version: 10.0.1
@@ -517,24 +517,12 @@ packages:
     resolution: {integrity: sha512-x8iP8gOtFptbgQaTAqrp9hylq2b4US/0VOY7SitrVN3eYA7mO6C70sCrVBBh4AcPAqXd8qUPgdcDfNlgqaEQ6g==}
     engines: {node: '>=22.0.0'}
 
-  '@w5s/dev@3.4.2':
-    resolution: {integrity: sha512-mR3eawzfJweoGn2w/FiwX2QSrMjIWdZRRG910yJD1WJAzSl4r6hieT124sEdc0EVEhaJYXI8PfxzBS4DEKIJKg==}
+  '@w5s/dev@3.4.3':
+    resolution: {integrity: sha512-lKoZKKRAhgSPpyyhO8jsqWjM1HWXQIYv7M928RXat2b1QwJjLW2zai4+K/oLXYM7o2qEGEVfW0tbNlMUbrKtcw==}
     engines: {node: '>=22.0.0'}
 
-  '@w5s/eslint-config-ignore@1.2.2':
-    resolution: {integrity: sha512-Z48+J7C2+SXcCdHx7F9pD5Wbbc6B/ni5J7S5z+cVhphiL2fY+76QhU9XA1UvZMTk8aBCq8TevwN4mEXhn03j9Q==}
-    engines: {node: '>=22.0.0'}
-    peerDependencies:
-      eslint: 9.x || 10.x
-      typescript: 4.x || 5.x || 6.x
-    peerDependenciesMeta:
-      eslint:
-        optional: true
-      typescript:
-        optional: true
-
-  '@w5s/eslint-config@3.7.1':
-    resolution: {integrity: sha512-h6z7psLgAqTU/mAdsNAedlRLnhfZkuy7S0etqCRml/g3PN6a/7xCelekZUkGDYIyueTO0wzKrAqwzhnpPKYsZQ==}
+  '@w5s/eslint-config-ignore@1.2.3':
+    resolution: {integrity: sha512-y6DhoZ9LY4TZRsZTcjZHxBR2ic+K1JRZKzgRu33vZcDMZ/tOEt71ndpXoKkehxpp/+V7PNBBa/qcI4VNrPD1Sg==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: 9.x || 10.x
@@ -545,8 +533,20 @@ packages:
       typescript:
         optional: true
 
-  '@w5s/prettier-config@3.1.10':
-    resolution: {integrity: sha512-O/9P7CxUxMsSOvj9W5sjxpWMyzNy3/fGc0jd4FMYlZcnCOlzh6Rc865N9zo7OhYAqDwyfrg8HjWRSDsnR+B1kA==}
+  '@w5s/eslint-config@3.7.3':
+    resolution: {integrity: sha512-rCu5o1FjZjFI3zC+gaZQmM+w3SYMdPsFi+lP0qxyy4FpiqH72fLv2SyDG415tj0cOuH3YyiykaYV+s2zuYEnYQ==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      eslint: 9.x || 10.x
+      typescript: 4.x || 5.x || 6.x
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+      typescript:
+        optional: true
+
+  '@w5s/prettier-config@3.1.11':
+    resolution: {integrity: sha512-5DW+Mz0fgW7+Zwu3oQb4GHPrmZIKNZiSBrAH8iXKWUhhSvcUAb3yc4zK9rZxxIZiK0ZY9Ko0TfCtf2lmp2uLpg==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       prettier: 2.x || 3.x
@@ -2456,11 +2456,11 @@ snapshots:
       emoji-regex: 10.6.0
       gitmojis: 3.15.0
 
-  '@w5s/dev@3.4.2':
+  '@w5s/dev@3.4.3':
     dependencies:
       '@types/eslint': 9.6.1
 
-  '@w5s/eslint-config-ignore@1.2.2(eslint@10.5.0)(typescript@6.0.3)':
+  '@w5s/eslint-config-ignore@1.2.3(eslint@10.5.0)(typescript@6.0.3)':
     dependencies:
       find-up: 8.0.0
       parse-gitignore: 2.0.0
@@ -2468,7 +2468,7 @@ snapshots:
       eslint: 10.5.0
       typescript: 6.0.3
 
-  '@w5s/eslint-config@3.7.1(eslint@10.5.0)(typescript@6.0.3)':
+  '@w5s/eslint-config@3.7.3(eslint@10.5.0)(typescript@6.0.3)':
     dependencies:
       '@e18e/eslint-plugin': 0.5.0(eslint@10.5.0)
       '@eslint/js': 10.0.1(eslint@10.5.0)
@@ -2478,9 +2478,9 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 8.61.0(@typescript-eslint/parser@8.61.0(eslint@10.5.0)(typescript@6.0.3))(eslint@10.5.0)(typescript@6.0.3)
       '@typescript-eslint/parser': 8.61.0(eslint@10.5.0)(typescript@6.0.3)
       '@vitest/eslint-plugin': 1.6.20(@typescript-eslint/eslint-plugin@8.61.0(@typescript-eslint/parser@8.61.0(eslint@10.5.0)(typescript@6.0.3))(eslint@10.5.0)(typescript@6.0.3))(eslint@10.5.0)(typescript@6.0.3)
-      '@w5s/dev': 3.4.2
-      '@w5s/eslint-config-ignore': 1.2.2(eslint@10.5.0)(typescript@6.0.3)
-      '@w5s/prettier-config': 3.1.10
+      '@w5s/dev': 3.4.3
+      '@w5s/eslint-config-ignore': 1.2.3(eslint@10.5.0)(typescript@6.0.3)
+      '@w5s/prettier-config': 3.1.11
       eslint-merge-processors: 2.0.0(eslint@10.5.0)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.61.0(eslint@10.5.0)(typescript@6.0.3))(eslint@10.5.0)
       eslint-plugin-jsdoc: 63.0.2(eslint@10.5.0)
@@ -2505,7 +2505,7 @@ snapshots:
       - ts-declaration-location
       - vitest
 
-  '@w5s/prettier-config@3.1.10': {}
+  '@w5s/prettier-config@3.1.11': {}
 
   acorn-jsx@5.3.2(acorn@8.17.0):
     dependencies:
