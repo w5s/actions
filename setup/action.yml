@@ -47,7 +47,7 @@ runs:
 
     - name: ⚙️ Setup tools
       id: setup-tools
-      uses: ./setup-tools
+      uses: w5s/actions/setup-tools@main
       with:
         node-version: ${{ inputs.node-version }}
         include: ${{ inputs.asdf-include }}
