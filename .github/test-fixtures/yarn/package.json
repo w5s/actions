@@ -1,8 +1,8 @@
 {
   "name": "fixture-yarn",
   "private": true,
-  "packageManager": "yarn@4.9.2",
   "dependencies": {
     "is-number": "7.0.0"
-  }
+  },
+  "packageManager": "yarn@4.9.2"
 }
