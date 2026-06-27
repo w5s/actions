@@ -12,8 +12,8 @@ importers:
         specifier: 20.19.43
         version: 20.19.43
       '@w5s/commitlint-config':
-        specifier: 3.1.11
-        version: 3.1.11
+        specifier: 3.1.12
+        version: 3.1.12
       '@w5s/eslint-config':
         specifier: 3.7.3
         version: 3.7.3(eslint@10.5.0)(typescript@6.0.3)
@@ -504,8 +504,8 @@ packages:
       vitest:
         optional: true
 
-  '@w5s/commitlint-config@3.1.11':
-    resolution: {integrity: sha512-f7N4hehES0CXSYI+Ddhh2PNdu004z1PxEkaTdwojs3kaM/wN/zePy/MINSKkJmgbqkkDfyzwswkUfBG2rYwPAQ==}
+  '@w5s/commitlint-config@3.1.12':
+    resolution: {integrity: sha512-xM+tJhk4sFk7BvtfLhGQbVjc9EZSk6tTo8WXQw6+0qL2HpTpNu4YHrNBBm//Y0BpWQ4OLfqDq6pJ2tESOKEzHA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@commitlint/cli': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
@@ -2449,7 +2449,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@w5s/commitlint-config@3.1.11':
+  '@w5s/commitlint-config@3.1.12':
     dependencies:
       '@commitlint/types': 21.1.0
       '@w5s/conventional-changelog': 3.2.4
