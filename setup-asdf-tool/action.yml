@@ -33,13 +33,13 @@ runs:
       run: bash "${{ github.action_path }}/main.sh"
 
     - name: 📦 Cache asdf plugin (per tool)
-      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
       with:
         path: ${{ steps.asdf-env.outputs.ASDF_DATA_DIR }}/plugins/${{ inputs.tool }}
         key: ${{ runner.os }}-${{ runner.arch }}-asdf-plugin-${{ inputs.tool }}-${{ steps.resolve.outputs.plugin-cache-key }}
 
     - name: 📦 Cache asdf install (per tool version)
-      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
       with:
         path: ${{ steps.asdf-env.outputs.ASDF_DATA_DIR }}/installs/${{ inputs.tool }}/${{ steps.resolve.outputs.resolved-version }}
         key: ${{ runner.os }}-${{ runner.arch }}-asdf-install-${{ inputs.tool }}-${{ steps.resolve.outputs.resolved-version }}

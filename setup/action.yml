@@ -81,7 +81,7 @@ runs:
     # Local Nx cache (when not using Nx Cloud). Key by nx config + HEAD for exact re-runs;
     # restore-keys use base then any OS+config cache so config changes invalidate cache.
     - name: ⚙️ Setup Nx cache
-      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
       with:
         path: .nx/cache
         key: nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-${{ steps.nx-set-shas.outputs.head }}
