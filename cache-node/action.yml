@@ -44,7 +44,7 @@ runs:
       if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles('**/bun.lock') != '' || hashFiles('**/bun.lockb') != ''))
 
     - name: 📦 Cache bun
-      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.BUN_INSTALL_CACHE_DIR }}
         key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock', '**/bun.lockb') }}
@@ -65,7 +65,7 @@ runs:
       if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles('**/package-lock.json') != '')
 
     - name: 📦 Cache npm
-      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.NPM_CONFIG_CACHE }}
         key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
@@ -85,7 +85,7 @@ runs:
       if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
 
     - name: 📦 Cache pnpm
-      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.PNPM_STORE_DIR }}
         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -107,7 +107,7 @@ runs:
       if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles('**/yarn.lock') != '')
 
     - name: 📦 Cache yarn
-      uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.YARN_CACHE_FOLDER }}
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
