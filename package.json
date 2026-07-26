@@ -62,7 +62,7 @@
     "@w5s/commitlint-config": "3.8.0",
     "@w5s/eslint-config": "3.20.0",
     "cspell": "10.0.1",
-    "eslint": "10.7.0",
+    "eslint": "10.8.0",
     "typescript": "6.0.3"
   },
   "packageManager": "pnpm@11.17.0",
