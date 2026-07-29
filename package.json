@@ -32,11 +32,6 @@
     "test:empty": ":",
     "validate": "turbo run build lint test spellcheck"
   },
-  "commitlint": {
-    "extends": [
-      "@w5s/commitlint-config"
-    ]
-  },
   "lint-staged": {
     "!(**/dist/**)*.js?(x)": [
       "eslint"
