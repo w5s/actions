@@ -19,6 +19,7 @@ Run after checkout and after the package managers are available; run before inst
 - name: 📦 Cache Node package managers
   uses: w5s/actions/cache-node@main
   with:
+    cache-key-prefix: my-project- # optional
     npm-cache-path: .npm-cache # optional
     pnpm-cache-path: .pnpm-store # optional
     yarn-cache-path: .yarn-cache # optional
@@ -36,6 +37,7 @@ Run after checkout and after the package managers are available; run before inst
 - `yarn-cache-enabled` (optional): enable or disable yarn cache. If unset, enabled when `yarn.lock` is found.
 - `yarn-cache-path` (optional): yarn cache directory to store/restore. Defaults to `~/.yarn/cache`.
 - `yarn-nm-mode` (optional): Yarn nm mode. Defaults to `"hardlinks-local"`.
+- `cache-key-prefix` (optional): prefix prepended as-is to all cache keys and restore keys. Defaults to empty.
 
 ## Requirements
 
