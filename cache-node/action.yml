@@ -47,9 +47,9 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.BUN_INSTALL_CACHE_DIR }}
-        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock', '**/bun.lockb') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-bun-${{ hashFiles('**/bun.lock', '**/bun.lockb') }}
         restore-keys: |
-          ${{ runner.os }}-bun-
+          ${{ runner.os }}-${{ runner.arch }}-bun-
       if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles('**/bun.lock') != '' || hashFiles('**/bun.lockb') != ''))
 
     - name: ⚙️ Configure npm cache path
@@ -68,9 +68,9 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.NPM_CONFIG_CACHE }}
-        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-npm-
+          ${{ runner.os }}-${{ runner.arch }}-npm-
       if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles('**/package-lock.json') != '')
 
     - name: ⚙️ Configure pnpm store path
@@ -88,9 +88,9 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.PNPM_STORE_DIR }}
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-
+          ${{ runner.os }}-${{ runner.arch }}-pnpm-
       if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
 
     - name: ⚙️ Configure yarn cache path
@@ -110,7 +110,7 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.YARN_CACHE_FOLDER }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          ${{ runner.os }}-${{ runner.arch }}-yarn-
       if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles('**/yarn.lock') != '')
