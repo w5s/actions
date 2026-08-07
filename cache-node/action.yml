@@ -81,19 +81,22 @@ runs:
       shell: bash
       run: |
         if [ -n "${{ inputs.pnpm-cache-path }}" ]; then
-          PNPM_STORE_DIR="${{ inputs.pnpm-cache-path }}"
+          PNPM_CONFIG_STORE_DIR="${{ inputs.pnpm-cache-path }}"
         else
-          PNPM_STORE_DIR="$HOME/.pnpm-store"
+          PNPM_CONFIG_STORE_DIR="$HOME/.pnpm-store"
         fi
-        echo "PNPM_STORE_DIR=$PNPM_STORE_DIR" >> "$GITHUB_ENV"
-        echo "npm_config_store_dir=$PNPM_STORE_DIR" >> "$GITHUB_ENV"
-        echo "NPM_CONFIG_STORE_DIR=$PNPM_STORE_DIR" >> "$GITHUB_ENV"
+        # pnpm ≥11
+        echo "PNPM_CONFIG_STORE_DIR=$PNPM_CONFIG_STORE_DIR" >> "$GITHUB_ENV"
+        echo "pnpm_config_store_dir=$PNPM_CONFIG_STORE_DIR" >> "$GITHUB_ENV"
+        # pnpm <11
+        echo "NPM_CONFIG_STORE_DIR=$PNPM_CONFIG_STORE_DIR" >> "$GITHUB_ENV"
+        echo "npm_config_store_dir=$PNPM_CONFIG_STORE_DIR" >> "$GITHUB_ENV"
       if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
 
     - name: 📦 Cache pnpm
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
-        path: ${{ env.PNPM_STORE_DIR }}
+        path: ${{ env.PNPM_CONFIG_STORE_DIR }}
         key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-pnpm-
