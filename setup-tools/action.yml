@@ -47,7 +47,7 @@ runs:
 
     - name: ⚙️ Setup Node.js
       id: setup-node
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version: ${{ steps.resolve.outputs.node-version }}
       if: steps.resolve.outputs.node-enabled == 'true'
