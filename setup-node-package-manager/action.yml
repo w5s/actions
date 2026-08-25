@@ -1,0 +1,44 @@
+name: 'Setup Node package manager'
+description: 'Install Yarn, pnpm, Bun, or use npm based on package.json packageManager or .tool-versions'
+outputs:
+  package_manager:
+    description: 'Detected package manager name (bun, pnpm, yarn, or npm).'
+    value: ${{ steps.detect-package-manager.outputs.package_manager }}
+  package_manager_version:
+    description: 'Detected package manager version, when available.'
+    value: ${{ steps.detect-package-manager.outputs.package_manager_version }}
+runs:
+  using: 'composite'
+  steps:
+    - name: ⚙️ Detect Node package manager
+      id: detect-package-manager
+      shell: bash
+      run: bash "${{ github.action_path }}/detect-package-manager.sh"
+      if: hashFiles('package.json') != '' || hashFiles('.tool-versions') != ''
+
+    - name: ⚙️ Setup Bun
+      uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      with:
+        bun-version: ${{ steps.detect-package-manager.outputs.package_manager_version != '' && steps.detect-package-manager.outputs.package_manager_version || 'latest' }}
+      if: steps.detect-package-manager.outputs.package_manager == 'bun'
+
+    - name: ⚙️ Setup pnpm
+      uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      with:
+        version: ${{ steps.detect-package-manager.outputs.package_manager_version != '' && steps.detect-package-manager.outputs.package_manager_version || 'latest' }}
+        run_install: false
+      if: steps.detect-package-manager.outputs.package_manager == 'pnpm'
+
+    - name: ⚙️ Setup Yarn
+      shell: bash
+      run: |
+        yarn_version="${{ steps.detect-package-manager.outputs.package_manager_version }}"
+        if [ -z "$yarn_version" ]; then
+          yarn_version="latest"
+        fi
+        if [[ "$yarn_version" =~ ^1(\.|$) ]]; then
+          npm install -g "yarn@${yarn_version}"
+        else
+          npm install -g "@yarnpkg/cli-dist@${yarn_version}"
+        fi
+      if: steps.detect-package-manager.outputs.package_manager == 'yarn'
