@@ -20,7 +20,8 @@ jobs:
           - name: node
           - name: npm
           - name: python
-          - name: pnpm
+          - name: pnpm-package-json
+          - name: pnpm-tool-versions
           - name: ruby
           - name: yarn
     steps:
@@ -38,8 +39,8 @@ jobs:
         if: hashFiles('.tool-versions') != ''
 
       - name: 🛠️ Setup Node package manager
-        uses: ./setup-corepack
-        if: hashFiles('package.json') != ''
+        uses: ./setup-node-package-manager
+        if: hashFiles('package.json') != '' || hashFiles('.tool-versions') != ''
 
       - name: ✅ Run fixture verification script
         shell: bash

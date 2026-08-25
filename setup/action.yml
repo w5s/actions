@@ -1,5 +1,5 @@
 name: 'CI setup'
-description: 'Checkout, Turbo cache, tools/Node, corepack'
+description: 'Checkout, Turbo cache, tools/Node, package manager setup'
 inputs:
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
@@ -59,8 +59,8 @@ runs:
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && (hashFiles('package.json') != ''))
 
     - name: ⚙️ Setup Node package manager
-      uses: w5s/actions/setup-corepack@main
-      if: hashFiles('package.json') != ''
+      uses: w5s/actions/setup-node-package-manager@main
+      if: hashFiles('package.json') != '' || hashFiles('.tool-versions') != ''
 
     - name: 🔧 Configure npm for GitHub Packages
       shell: bash

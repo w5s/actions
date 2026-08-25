@@ -8,7 +8,7 @@ Checkout is expected to be done before. This composite action configures the run
 - **Nx cache**: when `nx.json` exists (or `nx-cache` is `true`), computes base/head SHAs and restores/saves local `.nx/cache`.
 - **Tools setup**: runs `w5s/actions/setup-tools` and installs selected tools using official setup actions (`actions/setup-node`, `actions/setup-python`, `ruby/setup-ruby`) with `.tool-versions` as source of truth.
 - **Package manager cache**: when `node-cache` is not `false`, restores/saves npm cache (when `package-lock.json` exists), Yarn cache (when `yarn.lock` exists), pnpm store (when `pnpm-lock.yaml` exists), or Bun cache (when `bun.lockb` exists). Use `node-cache: 'true'` to force enable or `node-cache: 'false'` to disable.
-- **Corepack**: enables Corepack when `package.json` declares `packageManager` (for Yarn/pnpm/Bun) via `w5s/actions/setup-corepack`.
+- **Package manager setup**: installs Yarn, pnpm, or Bun (or uses npm) from `package.json` `packageManager` and/or `.tool-versions` via `w5s/actions/setup-node-package-manager`.
 - **GitHub Packages**: when `github-token` is set (defaults to `github.token`), configures npm for `//npm.pkg.github.com`.
 
 ## Usage
@@ -56,7 +56,7 @@ Use in a job after `actions/checkout`:
 ## Requirements
 
 - Job must run after `actions/checkout`.
-- `package.json` is required for Corepack and package manager detection.
+- `package.json` and/or `.tool-versions` is required for package manager detection.
 - When `node-cache` is unset, the presence of a lockfile (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, or `bun.lockb`) determines which package manager cache runs.
 - `nx.json` is required for Nx SHA computation and cache steps (when `nx-cache` is not `false`).
 - `turbo.json` is required for automatic Turbo cache setup when `turbo-cache` is unset.
