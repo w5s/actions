@@ -23,7 +23,7 @@ runs:
       if: steps.detect-package-manager.outputs.package_manager == 'bun'
 
     - name: ⚙️ Setup pnpm
-      uses: pnpm/action-setup@6.1.0
+      uses: pnpm/action-setup@v6.1.0
       with:
         version: ${{ steps.detect-package-manager.outputs.package_manager_version != '' && steps.detect-package-manager.outputs.package_manager_version || 'latest' }}
         run_install: false
