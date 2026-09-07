@@ -54,13 +54,13 @@ runs:
         exclude: ${{ inputs.tool-exclude }}
       if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
 
-    - name: ⚙️ Setup Node package manager cache
-      uses: w5s/actions/cache-node@main
-      if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && (hashFiles('package.json') != ''))
-
     - name: ⚙️ Setup Node package manager
       uses: w5s/actions/setup-node-package-manager@main
       if: hashFiles('package.json') != '' || hashFiles('.tool-versions') != ''
+
+    - name: ⚙️ Setup Node package manager cache
+      uses: w5s/actions/cache-node@main
+      if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && (hashFiles('package.json') != ''))
 
     - name: 🔧 Configure npm for GitHub Packages
       shell: bash
