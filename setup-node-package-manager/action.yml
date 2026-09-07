@@ -29,6 +29,14 @@ runs:
         run_install: false
       if: steps.detect-package-manager.outputs.package_manager == 'pnpm'
 
+    - name: 🔧 Configure pnpm PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false
+      shell: bash
+      run: |
+        # Since pnpm v11, `verifyDepsBeforeRun` defaults to `install`, so every `pnpm run` may
+        # re-install dependencies. A `prepare` script calling `pnpm run` then loops forever.
+        echo "PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false" >> "$GITHUB_ENV"
+      if: steps.detect-package-manager.outputs.package_manager == 'pnpm'
+
     - name: ⚙️ Setup Yarn
       shell: bash
       run: |
