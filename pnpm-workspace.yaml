@@ -1,2 +1,4 @@
-configDependencies:
-  '@w5s/pnpm-plugin-config': 1.13.0
+allowBuilds:
+  lefthook: true
+minimumReleaseAgeExclude:
+  - '@w5s/*'
