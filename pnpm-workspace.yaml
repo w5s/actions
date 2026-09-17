@@ -1,0 +1,2 @@
+configDependencies:
+  '@w5s/pnpm-plugin-config': 1.13.0
