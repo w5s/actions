@@ -1,6 +1,9 @@
 name: 'CI setup'
 description: 'Checkout, Turbo cache, tools/Node, package manager setup'
 inputs:
+  coverage:
+    description: 'Enable or disable coverage. When unset, coverage is enabled by default.'
+    required: false
   github-token:
     description: 'GitHub token for npm auth (e.g. GitHub Packages). When set, configures npm for //npm.pkg.github.com'
     required: false
@@ -44,6 +47,16 @@ runs:
         git config user.name "${{ inputs.git-user-name }}"
         git config user.email "${{ inputs.git-user-email }}"
       if: inputs.git-user-name != '' && inputs.git-user-email != ''
+
+    - name: ⚙️ Setup coverage
+      shell: bash
+      run: |
+        coverage_input='${{ inputs.coverage }}'
+        if [ -n "$coverage_input" ]; then
+          echo "COVERAGE=${coverage_input}" >> "$GITHUB_ENV"
+        elif [ -z "${COVERAGE+x}" ]; then
+          echo "COVERAGE=true" >> "$GITHUB_ENV"
+        fi
 
     - name: ⚙️ Setup tools
       id: setup-tools
