@@ -181,8 +181,8 @@ importers:
         specifier: 20.19.43
         version: 20.19.43
       '@w5s/commitlint-config':
-        specifier: 3.24.0
-        version: 3.24.0(@commitlint/cli@21.2.2(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))
+        specifier: 3.28.0
+        version: 3.28.0(@commitlint/cli@21.2.2(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))
       '@w5s/eslint-config':
         specifier: 3.36.0
         version: 3.36.0(eslint@10.10.0(jiti@2.6.1))(typescript@6.0.3)
@@ -845,8 +845,8 @@ packages:
       vitest:
         optional: true
 
-  '@w5s/commitlint-config@3.24.0':
-    resolution: {integrity: sha512-b3tI3WbPwSTD+GDiu1gkLDyBuAV6bWM9yywiB4BuvBcNr+fQ/V2KTcWt1qfryGh3HDMKsYVqSZlU04GrRuDc6w==}
+  '@w5s/commitlint-config@3.28.0':
+    resolution: {integrity: sha512-a8uk/d3qL3/+1To2sdpzHotnknfANxkGNWvp/g//FCdz5CMJNEqUhc7pWGK8CO/6sVkXq0+AwBlkAKimoe/ItQ==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@commitlint/cli': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
@@ -854,8 +854,8 @@ packages:
       '@commitlint/cli':
         optional: true
 
-  '@w5s/conventional-changelog@3.25.0':
-    resolution: {integrity: sha512-qRqIzotYcvgFzv5FUOVLTRkNO72PQo1BQl7wawqPdA9jI6KtWAqd3YkJGAdryAqkxKOOjMFhSXEhc8DbJ8NKRQ==}
+  '@w5s/conventional-changelog@3.29.0':
+    resolution: {integrity: sha512-NcEMT+jNcRCRXmtNYtshn+rAg4AWqxo+vpZ5dlIbVetSl57qv8Ck2b9etbFTeVDH/bGiZ31xiDvGoBhsqtdYVA==}
     engines: {node: '>=22.0.0'}
 
   '@w5s/dev@3.27.0':
@@ -3405,14 +3405,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@w5s/commitlint-config@3.24.0(@commitlint/cli@21.2.2(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))':
+  '@w5s/commitlint-config@3.28.0(@commitlint/cli@21.2.2(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))':
     dependencies:
       '@commitlint/types': 21.2.0
-      '@w5s/conventional-changelog': 3.25.0
+      '@w5s/conventional-changelog': 3.29.0
     optionalDependencies:
       '@commitlint/cli': 21.2.2(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3)
 
-  '@w5s/conventional-changelog@3.25.0':
+  '@w5s/conventional-changelog@3.29.0':
     dependencies:
       '@commitlint/types': 21.2.0
       emoji-regex: 10.6.0
