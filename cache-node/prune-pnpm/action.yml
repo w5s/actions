@@ -1,0 +1,7 @@
+name: 'Prune pnpm store'
+description: 'Arm a post-job pnpm store prune so unused packages are dropped before actions/cache uploads.'
+runs:
+  using: 'node24'
+  main: 'main.js'
+  post: 'post.js'
+  post-if: always()

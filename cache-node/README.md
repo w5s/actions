@@ -8,6 +8,7 @@ Sets up `actions/cache` for bun, npm, pnpm, and yarn package manager caches.
 - Exports the cache environment variables used by each package manager in later steps.
 - No-ops per package manager when its lockfile is not found, unless that cache is explicitly enabled.
 - Uses lockfile hashes in cache keys for correctness.
+- For pnpm, when the store cache misses (or only a partial restore-keys hit), runs `pnpm store prune` after install and before the cache upload so unreferenced packages are not saved. npm, Yarn, and Bun have no equivalent selective prune.
 
 Run after checkout and after the package managers are available; run before install commands.
 
@@ -34,6 +35,7 @@ Run after checkout and after the package managers are available; run before inst
 - `npm-cache-path` (optional): npm cache directory to store/restore. Defaults to `~/.npm`.
 - `pnpm-cache-enabled` (optional): enable or disable pnpm cache. If unset, enabled when `pnpm-lock.yaml` is found.
 - `pnpm-cache-path` (optional): pnpm store directory to store/restore. Defaults to `~/.pnpm-store`.
+- `pnpm-store-prune` (optional): when pnpm caching is active, prune unreferenced store packages after install and before cache upload. Defaults to enabled. Set to `"false"` to disable.
 - `yarn-cache-enabled` (optional): enable or disable yarn cache. If unset, enabled when `yarn.lock` is found.
 - `yarn-cache-path` (optional): yarn cache directory to store/restore. Defaults to `~/.yarn/cache`.
 - `yarn-nm-mode` (optional): Yarn nm mode. Defaults to `"hardlinks-local"`.

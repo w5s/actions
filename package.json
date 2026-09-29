@@ -5,7 +5,7 @@
   "description": "",
   "repository": {
     "type": "git",
-    "url": "git@github.com:w5s/actions.git"
+    "url": "git+https://github.com/w5s/actions.git"
   },
   "license": "MIT",
   "type": "module",

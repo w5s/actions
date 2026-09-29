@@ -19,6 +19,10 @@ inputs:
   pnpm-cache-path:
     description: 'pnpm store directory path'
     required: false
+  pnpm-store-prune:
+    description: 'When pnpm caching is active, prune unreferenced store packages after install and before cache upload. Defaults to enabled. Set to "false" to disable.'
+    required: false
+    default: 'true'
   yarn-cache-enabled:
     description: 'Yarn cache enabled. If unset, the cache will be enabled if a yarn.lock file is found.'
     required: false
@@ -94,6 +98,7 @@ runs:
       if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
 
     - name: 📦 Cache pnpm
+      id: pnpm-cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.PNPM_CONFIG_STORE_DIR }}
@@ -101,6 +106,15 @@ runs:
         restore-keys: |
           ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-pnpm-
       if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != '')
+
+    # Arms a post-job prune (runs after install, before actions/cache upload). Exact
+    # cache hits are not re-uploaded, so pruning there only costs time.
+    - name: 🧹 Arm pnpm store prune
+      uses: ./prune-pnpm
+      if: >
+        (inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))
+        && inputs.pnpm-store-prune != 'false'
+        && steps.pnpm-cache.outputs.cache-hit != 'true'
 
     - name: ⚙️ Configure yarn cache path
       shell: bash
