@@ -109,12 +109,12 @@ runs:
 
     # Arms a post-job prune (runs after install, before actions/cache upload). Exact
     # cache hits are not re-uploaded, so pruning there only costs time.
-    - name: 🧹 Arm pnpm store prune
-      uses: ./prune-pnpm
-      if: >
-        (inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))
-        && inputs.pnpm-store-prune != 'false'
-        && steps.pnpm-cache.outputs.cache-hit != 'true'
+    # - name: 🧹 Arm pnpm store prune
+    #   uses: ./prune-pnpm
+    #   if: >
+    #     (inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('**/pnpm-lock.yaml') != ''))
+    #     && inputs.pnpm-store-prune != 'false'
+    #     && steps.pnpm-cache.outputs.cache-hit != 'true'
 
     - name: ⚙️ Configure yarn cache path
       shell: bash
