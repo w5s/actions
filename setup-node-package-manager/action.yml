@@ -10,11 +10,13 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    # Do not gate on hashFiles: it is always relative to GITHUB_WORKSPACE, while
+    # callers may set working-directory (e.g. integration fixtures). The script
+    # no-ops when neither file exists in the current working directory.
     - name: ⚙️ Detect Node package manager
       id: detect-package-manager
       shell: bash
       run: bash "${{ github.action_path }}/detect-package-manager.sh"
-      if: hashFiles('package.json') != '' || hashFiles('.tool-versions') != ''
 
     - name: ⚙️ Setup Bun
       uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
