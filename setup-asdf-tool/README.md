@@ -27,6 +27,7 @@ This composite action resolves or reads an asdf tool version and applies it with
 | `tool` | Yes | asdf tool/plugin name, for example `nodejs`, `python`, or `ruby`. |
 | `version` | No | Optional version selector. Accepts major-only (`24`), major.minor (`24.14`), or exact semver (`24.14.0`). When omitted, the action reads the tool value from `.tool-versions`. |
 | `plugin` | No | Optional plugin source used as `asdf plugin add <tool> <plugin>` (plugin name or repository URL). |
+| `working-directory` | No | Directory relative to `GITHUB_WORKSPACE` that contains the project files. Defaults to `.`. |
 
 ## Outputs
 

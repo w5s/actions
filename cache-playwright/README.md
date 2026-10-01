@@ -28,6 +28,7 @@ Run after checkout and before `playwright install` / `playwright install --with-
 
 - `cache-enabled` (optional): enable or disable the Playwright browser cache. `true` forces enable, `false` disables. Unset: cache runs by default.
 - `cache-path` (optional): Playwright browser cache directory. Defaults to `~/.cache/ms-playwright`.
+- `working-directory` (optional): Directory relative to `GITHUB_WORKSPACE` that contains the project files. Defaults to `.`. Lockfile hashes for the cache key are scoped under this directory.
 
 ## Requirements
 

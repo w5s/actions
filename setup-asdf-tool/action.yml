@@ -10,6 +10,10 @@ inputs:
   plugin:
     description: 'Optional plugin source to use with asdf plugin add <tool> <plugin> (for example plugin name or URL).'
     required: false
+  working-directory:
+    description: 'Directory relative to GITHUB_WORKSPACE that contains the project files. Defaults to the workspace root.'
+    required: false
+    default: '.'
 outputs:
   resolved-version:
     description: 'Exact tool version resolved and applied with asdf set.'
@@ -25,6 +29,7 @@ runs:
     - name: ⚙️ Resolve tool version and cache identity
       id: resolve
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         CI_ASDF_TOOL: ${{ inputs.tool }}
         CI_ASDF_TOOL_VERSION: ${{ inputs.version }}
@@ -47,6 +52,7 @@ runs:
     - name: ⚙️ Resolve and set tool version
       id: setup-asdf-tool
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         CI_ASDF_TOOL: ${{ inputs.tool }}
         CI_ASDF_TOOL_VERSION: ${{ inputs.version }}

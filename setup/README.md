@@ -42,6 +42,7 @@ Use in a job after `actions/checkout`:
 - `node-cache` (optional): Enable or disable package manager cache (npm, Yarn, pnpm, Bun) from GitHub Actions cache. `true` forces enable for all, `false` disables. When unset, cache runs when the matching lockfile exists (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, or `bun.lockb`).
 - `turbo-cache` (optional): Enable or disable Turborepo cache from GitHub Actions cache. `true` forces enable, `false` disables. When unset, enables only when `turbo.json` exists.
 - `nx-cache` (optional): Enable or disable Nx local cache from GitHub Actions cache. `true` forces enable, `false` disables. When unset, enables only when `nx.json` exists.
+- `working-directory` (optional): Directory relative to `GITHUB_WORKSPACE` that contains the project files (`.tool-versions`, `package.json`, lockfiles). Defaults to `.`.
 
 ### Outputs
 

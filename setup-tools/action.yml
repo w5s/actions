@@ -16,6 +16,10 @@ inputs:
   ruby-version:
     description: 'Ruby version to install. When unset, uses ruby version from .tool-versions.'
     required: false
+  working-directory:
+    description: 'Directory relative to GITHUB_WORKSPACE that contains the project files. Defaults to the workspace root.'
+    required: false
+    default: '.'
 outputs:
   resolved-node-version:
     description: 'Exact Node.js version resolved and installed when node setup runs.'
@@ -37,6 +41,7 @@ runs:
     - name: ⚙️ Resolve selected tools and versions
       id: resolve
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         SETUP_TOOLS_INCLUDE: ${{ inputs.include }}
         SETUP_TOOLS_EXCLUDE: ${{ inputs.exclude }}

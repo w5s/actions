@@ -8,7 +8,9 @@ if (process.env.STATE_prune !== 'true') {
 
 // Skip when install never produced node_modules — pruning then empties a store
 // restored from restore-keys and would upload a hollow cache under the new key.
-const nodeModules = path.join(process.env.GITHUB_WORKSPACE || process.cwd(), 'node_modules');
+const projectDirectory =
+  process.env.STATE_workingDirectory || process.env.GITHUB_WORKSPACE || process.cwd();
+const nodeModules = path.join(projectDirectory, 'node_modules');
 if (!fs.existsSync(nodeModules)) {
   // eslint-disable-next-line no-console
   console.log('Skipping pnpm store prune: node_modules not found (install may have failed or been skipped).');
