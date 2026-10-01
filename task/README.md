@@ -33,6 +33,7 @@ When multiple Node lockfiles exist, the action fails to avoid ambiguous package 
 | `task-manager` | no      | `auto` (default), `make`, `npm`, `pnpm`, `yarn`, or `bun`. |
 | `github-token`  | no       | Exported as `GITHUB_TOKEN` when set. |
 | `node-options`  | no       | Sets `NODE_OPTIONS` for the step. |
+| `working-directory` | no | Directory relative to `GITHUB_WORKSPACE` that contains the project files. Defaults to `.`. |
 
 ## Requirements
 

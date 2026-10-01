@@ -16,11 +16,16 @@ inputs:
     description: 'Node options (NODE_OPTIONS), e.g. --max-old-space-size=8192.'
     required: false
     default: '--max-old-space-size=8192'
+  working-directory:
+    description: 'Directory relative to GITHUB_WORKSPACE that contains the project files. Defaults to the workspace root.'
+    required: false
+    default: '.'
 runs:
   using: 'composite'
   steps:
     - name: Run task
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         CI_TASK_NAME: ${{ inputs.task }}
         CI_TASK_MANAGER: ${{ inputs['task-manager'] }}

@@ -34,6 +34,10 @@ inputs:
   turbo-cache:
     description: 'Enable or disable TurboRepo cache from github actions cache. When unset, Turbo cache runs only if turbo.json exists.'
     required: false
+  working-directory:
+    description: 'Directory relative to GITHUB_WORKSPACE that contains the project files (.tool-versions, package.json, lockfiles). Defaults to the workspace root.'
+    required: false
+    default: '.'
 outputs:
   resolved-node-version:
     description: 'Exact Node.js version resolved and installed when node-version input is set.'
@@ -65,15 +69,20 @@ runs:
         node-version: ${{ inputs.node-version }}
         include: ${{ inputs.tool-include }}
         exclude: ${{ inputs.tool-exclude }}
-      if: hashFiles('.tool-versions') != '' || inputs.node-version != ''
+        working-directory: ${{ inputs.working-directory }}
+      if: hashFiles(format('{0}/.tool-versions', inputs.working-directory)) != '' || inputs.node-version != ''
 
     - name: ⚙️ Setup Node package manager
       uses: w5s/actions/setup-node-package-manager@main
-      if: hashFiles('package.json') != '' || hashFiles('.tool-versions') != ''
+      with:
+        working-directory: ${{ inputs.working-directory }}
+      if: hashFiles(format('{0}/package.json', inputs.working-directory)) != '' || hashFiles(format('{0}/.tool-versions', inputs.working-directory)) != ''
 
     - name: ⚙️ Setup Node package manager cache
       uses: w5s/actions/cache-node@main
-      if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && (hashFiles('package.json') != ''))
+      with:
+        working-directory: ${{ inputs.working-directory }}
+      if: inputs.node-cache == 'true' || (inputs.node-cache != 'false' && (hashFiles(format('{0}/package.json', inputs.working-directory)) != ''))
 
     - name: 🔧 Configure npm for GitHub Packages
       shell: bash
@@ -82,33 +91,36 @@ runs:
 
     - name: ⚙️ Setup Turbo cache
       uses: rharkor/caching-for-turbo@2238fae6eb9a9936f92356f54cb3660200d105e7 # v2.5.1
-      if: inputs.turbo-cache == 'true' || (inputs.turbo-cache != 'false' && hashFiles('turbo.json') != '')
+      if: inputs.turbo-cache == 'true' || (inputs.turbo-cache != 'false' && hashFiles(format('{0}/turbo.json', inputs.working-directory)) != '')
 
     - name: ⚙️ Setup Nx
       uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5
       id: nx-set-shas
       with:
         gh-token: ${{ inputs.github-token }}
-      if: hashFiles('nx.json') != ''
+      if: hashFiles(format('{0}/nx.json', inputs.working-directory)) != ''
 
     # Local Nx cache (when not using Nx Cloud). Key by nx config + HEAD for exact re-runs;
     # restore-keys use base then any OS+config cache so config changes invalidate cache.
     - name: ⚙️ Setup Nx cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
-        path: .nx/cache
-        key: nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-${{ steps.nx-set-shas.outputs.head }}
+        path: ${{ inputs.working-directory }}/.nx/cache
+        key: nx-cache-${{ runner.os }}-${{ hashFiles(format('{0}/nx.json', inputs.working-directory)) }}-${{ steps.nx-set-shas.outputs.head }}
         restore-keys: |
-          nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-${{ steps.nx-set-shas.outputs.base }}
-          nx-cache-${{ runner.os }}-${{ hashFiles('nx.json') }}-
-      if: steps.nx-set-shas.outcome == 'success' && (inputs.nx-cache == 'true' || (inputs.nx-cache != 'false' && hashFiles('nx.json') != ''))
+          nx-cache-${{ runner.os }}-${{ hashFiles(format('{0}/nx.json', inputs.working-directory)) }}-${{ steps.nx-set-shas.outputs.base }}
+          nx-cache-${{ runner.os }}-${{ hashFiles(format('{0}/nx.json', inputs.working-directory)) }}-
+      if: steps.nx-set-shas.outcome == 'success' && (inputs.nx-cache == 'true' || (inputs.nx-cache != 'false' && hashFiles(format('{0}/nx.json', inputs.working-directory)) != ''))
 
     - name: ⚙️ Setup Playwright cache
       uses: w5s/actions/cache-playwright@main
+      with:
+        working-directory: ${{ inputs.working-directory }}
       if: inputs.node-cache == 'true' || (inputs.node-cache != 'false')
 
     - name: ℹ️ Package manager information
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         if [ -f yarn.lock ]; then
           echo "yarn: $(yarn --version)"
@@ -119,4 +131,4 @@ runs:
         else
           echo 'No lockfile found (yarn.lock, pnpm-lock.yaml, or package-lock.json).'
         fi
-      if: hashFiles('package.json') != ''
+      if: hashFiles(format('{0}/package.json', inputs.working-directory)) != ''

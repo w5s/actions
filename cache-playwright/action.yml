@@ -7,6 +7,10 @@ inputs:
   cache-path:
     description: 'Playwright browser cache directory path'
     required: false
+  working-directory:
+    description: 'Directory relative to GITHUB_WORKSPACE that contains the project files. Defaults to the workspace root.'
+    required: false
+    default: '.'
 runs:
   using: 'composite'
   steps:
@@ -24,7 +28,7 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml', '**/yarn.lock', '**/bun.lock', '**/bun.lockb') }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles(format('{0}/**/package-lock.json', inputs.working-directory), format('{0}/**/pnpm-lock.yaml', inputs.working-directory), format('{0}/**/yarn.lock', inputs.working-directory), format('{0}/**/bun.lock', inputs.working-directory), format('{0}/**/bun.lockb', inputs.working-directory)) }}
         restore-keys: |
           ${{ runner.os }}-playwright-
       if: inputs.cache-enabled == 'true' || (inputs.cache-enabled != 'false')

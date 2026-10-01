@@ -29,6 +29,7 @@ Composite action to setup Node.js, Python, and Ruby with official setup actions 
 - `node-version` (optional): Node.js version override. When unset, reads `nodejs` from `.tool-versions`.
 - `python-version` (optional): Python version override. When unset, reads `python` from `.tool-versions`.
 - `ruby-version` (optional): Ruby version override. When unset, reads `ruby` from `.tool-versions`.
+- `working-directory` (optional): Directory relative to `GITHUB_WORKSPACE` that contains the project files. Defaults to `.`.
 
 ## Outputs
 

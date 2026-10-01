@@ -35,10 +35,16 @@ When the manager name is known but the version is missing, the version is read f
 - name: ⚙️ Setup Node package manager
   uses: w5s/actions/setup-node-package-manager@main
   id: package-manager
+  with: {}
+  # working-directory: apps/web # optional
 
 - name: ℹ️ Package manager
   run: echo "${{ steps.package-manager.outputs.package_manager }}@${{ steps.package-manager.outputs.package_manager_version }}"
 ```
+
+## Inputs
+
+- `working-directory` (optional): Directory relative to `GITHUB_WORKSPACE` that contains the project files. Defaults to `.`.
 
 ## Example `.tool-versions`
 

@@ -24,11 +24,6 @@ jobs:
           - name: pnpm-tool-versions
           - name: ruby
           - name: yarn
-    # `defaults.run.working-directory` only applies to `run` steps; composite actions
-    # read their input files from GITHUB_WORKSPACE unless pointed at the fixture.
-    env:
-      PACKAGE_JSON_FILE: ${{ github.workspace }}/.github/test-fixtures/${{ matrix.fixture.name }}/package.json
-      TOOL_VERSIONS_FILE: ${{ github.workspace }}/.github/test-fixtures/${{ matrix.fixture.name }}/.tool-versions
     defaults:
       run:
         working-directory: .github/test-fixtures/${{ matrix.fixture.name }}
@@ -38,10 +33,14 @@ jobs:
 
       - name: 🛠️ Setup tools
         uses: ./setup-tools
+        with:
+          working-directory: .github/test-fixtures/${{ matrix.fixture.name }}
         if: hashFiles(format('.github/test-fixtures/{0}/.tool-versions', matrix.fixture.name)) != ''
 
       - name: 🛠️ Setup Node package manager
         uses: ./setup-node-package-manager
+        with:
+          working-directory: .github/test-fixtures/${{ matrix.fixture.name }}
         if: >
           hashFiles(format('.github/test-fixtures/{0}/package.json', matrix.fixture.name)) != ''
           || hashFiles(format('.github/test-fixtures/{0}/.tool-versions', matrix.fixture.name)) != ''

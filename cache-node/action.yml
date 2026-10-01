@@ -37,6 +37,10 @@ inputs:
     description: 'Prefix prepended as-is to all cache keys and restore keys.'
     required: false
     default: ''
+  working-directory:
+    description: 'Directory relative to GITHUB_WORKSPACE that contains the project files. Defaults to the workspace root.'
+    required: false
+    default: '.'
 runs:
   using: 'composite'
   steps:
@@ -49,16 +53,16 @@ runs:
           BUN_INSTALL_CACHE_DIR="$HOME/.bun/install/cache"
         fi
         echo "BUN_INSTALL_CACHE_DIR=$BUN_INSTALL_CACHE_DIR" >> "$GITHUB_ENV"
-      if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles('bun.lock') != '' || hashFiles('bun.lockb') != ''))
+      if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles(format('{0}/bun.lock', inputs.working-directory)) != '' || hashFiles(format('{0}/bun.lockb', inputs.working-directory)) != ''))
 
     - name: 📦 Cache bun
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.BUN_INSTALL_CACHE_DIR }}
-        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-bun-${{ hashFiles('bun.lock', 'bun.lockb') }}
+        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-bun-${{ hashFiles(format('{0}/bun.lock', inputs.working-directory), format('{0}/bun.lockb', inputs.working-directory)) }}
         restore-keys: |
           ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-bun-
-      if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles('bun.lock') != '' || hashFiles('bun.lockb') != ''))
+      if: inputs.bun-cache-enabled == 'true' || (inputs.bun-cache-enabled != 'false' && (hashFiles(format('{0}/bun.lock', inputs.working-directory)) != '' || hashFiles(format('{0}/bun.lockb', inputs.working-directory)) != ''))
 
     - name: ⚙️ Configure npm cache path
       shell: bash
@@ -70,16 +74,16 @@ runs:
         fi
         echo "NPM_CONFIG_CACHE=$NPM_CONFIG_CACHE" >> "$GITHUB_ENV"
         echo "npm_config_cache=$NPM_CONFIG_CACHE" >> "$GITHUB_ENV"
-      if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles('package-lock.json') != '')
+      if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles(format('{0}/package-lock.json', inputs.working-directory)) != '')
 
     - name: 📦 Cache npm
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.NPM_CONFIG_CACHE }}
-        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
+        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles(format('{0}/package-lock.json', inputs.working-directory)) }}
         restore-keys: |
           ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-npm-
-      if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles('package-lock.json') != '')
+      if: inputs.npm-cache-enabled == 'true' || (inputs.npm-cache-enabled != 'false' && hashFiles(format('{0}/package-lock.json', inputs.working-directory)) != '')
 
     - name: ⚙️ Configure pnpm store path
       shell: bash
@@ -95,24 +99,26 @@ runs:
         # pnpm <11
         echo "NPM_CONFIG_STORE_DIR=$PNPM_CONFIG_STORE_DIR" >> "$GITHUB_ENV"
         echo "npm_config_store_dir=$PNPM_CONFIG_STORE_DIR" >> "$GITHUB_ENV"
-      if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('pnpm-lock.yaml') != '')
+      if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) != '')
 
     - name: 📦 Cache pnpm
       id: pnpm-cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.PNPM_CONFIG_STORE_DIR }}
-        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-pnpm-${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}
         restore-keys: |
           ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-pnpm-
-      if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('pnpm-lock.yaml') != '')
+      if: inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) != '')
 
     # Arms a post-job prune (runs after install, before actions/cache upload). Exact
     # cache hits are not re-uploaded, so pruning there only costs time.
     - name: 🧹 Arm pnpm store prune
       uses: w5s/actions/cache-node/prune-pnpm@main
+      env:
+        PRUNE_WORKING_DIRECTORY: ${{ inputs.working-directory }}
       if: >
-        (inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles('pnpm-lock.yaml') != ''))
+        (inputs.pnpm-cache-enabled == 'true' || (inputs.pnpm-cache-enabled != 'false' && hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) != ''))
         && inputs.pnpm-store-prune != 'false'
         && steps.pnpm-cache.outputs.cache-hit != 'true'
 
@@ -127,13 +133,13 @@ runs:
         echo "YARN_NM_MODE=${{ inputs.yarn-nm-mode }}" >> "$GITHUB_ENV"
         echo "YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER" >> "$GITHUB_ENV"
         echo "YARN_ENABLE_GLOBAL_CACHE=false" >> "$GITHUB_ENV"
-      if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles('yarn.lock') != '')
+      if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles(format('{0}/yarn.lock', inputs.working-directory)) != '')
 
     - name: 📦 Cache yarn
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ env.YARN_CACHE_FOLDER }}
-        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-yarn-${{ hashFiles('yarn.lock') }}
+        key: ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-yarn-${{ hashFiles(format('{0}/yarn.lock', inputs.working-directory)) }}
         restore-keys: |
           ${{ inputs.cache-key-prefix }}${{ runner.os }}-${{ runner.arch }}-yarn-
-      if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles('yarn.lock') != '')
+      if: inputs.yarn-cache-enabled == 'true' || (inputs.yarn-cache-enabled != 'false' && hashFiles(format('{0}/yarn.lock', inputs.working-directory)) != '')

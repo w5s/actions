@@ -1,7 +1,7 @@
 # Action integration fixtures
 
 This directory contains minimal sample projects used by workflow integration tests.
-Each fixture is executed in place (working directory set to that fixture folder), not copied to the repository root.
+Each fixture is executed in place via the actions' `working-directory` input (and `defaults.run.working-directory` for the fixture `test.sh`), not copied to the repository root.
 Each fixture provides a single `test.sh` entrypoint that runs setup/install checks.
 
 - `npm/`: Node.js project for validating `setup-tools` + `install` with npm.
