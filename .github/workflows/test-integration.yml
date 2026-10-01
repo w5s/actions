@@ -24,6 +24,11 @@ jobs:
           - name: pnpm-tool-versions
           - name: ruby
           - name: yarn
+    # `defaults.run.working-directory` only applies to `run` steps; composite actions
+    # read their input files from GITHUB_WORKSPACE unless pointed at the fixture.
+    env:
+      PACKAGE_JSON_FILE: ${{ github.workspace }}/.github/test-fixtures/${{ matrix.fixture.name }}/package.json
+      TOOL_VERSIONS_FILE: ${{ github.workspace }}/.github/test-fixtures/${{ matrix.fixture.name }}/.tool-versions
     defaults:
       run:
         working-directory: .github/test-fixtures/${{ matrix.fixture.name }}

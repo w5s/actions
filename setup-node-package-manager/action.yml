@@ -11,8 +11,8 @@ runs:
   using: 'composite'
   steps:
     # Do not gate on hashFiles: it is always relative to GITHUB_WORKSPACE, while
-    # callers may set working-directory (e.g. integration fixtures). The script
-    # no-ops when neither file exists in the current working directory.
+    # callers may point PACKAGE_JSON_FILE / TOOL_VERSIONS_FILE elsewhere. The script
+    # no-ops when neither file exists.
     - name: ⚙️ Detect Node package manager
       id: detect-package-manager
       shell: bash
