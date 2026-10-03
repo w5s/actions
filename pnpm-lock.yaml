@@ -173,8 +173,8 @@ importers:
         specifier: 20.19.43
         version: 20.19.43
       '@w5s/commitlint-config':
-        specifier: 3.30.0
-        version: 3.30.0(@commitlint/cli@21.2.3(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))
+        specifier: 3.32.0
+        version: 3.32.0(@commitlint/cli@21.2.3(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))
       '@w5s/eslint-config':
         specifier: 5.0.0
         version: 5.0.0(eslint@10.11.0(jiti@2.6.1))(typescript@6.0.3)
@@ -837,8 +837,8 @@ packages:
       vitest:
         optional: true
 
-  '@w5s/commitlint-config@3.30.0':
-    resolution: {integrity: sha512-4yua8rB8FSJ9DQAM8Ug9+F/omvndWNEMi7WLqN0uB3RU70WsGQ7WWQTPQTny7dfqYo3oR2q2Ver4UjPqpoRDUg==}
+  '@w5s/commitlint-config@3.32.0':
+    resolution: {integrity: sha512-RmvPqxbAVSxp7Vc2+9BTO34jog4ZdhY+cvhuoCxX7wd3+VlhivxQNoqf+9x26VNEd6DsYFpJWc6jj2b2iTLDsA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@commitlint/cli': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
@@ -846,8 +846,8 @@ packages:
       '@commitlint/cli':
         optional: true
 
-  '@w5s/conventional-changelog@3.31.0':
-    resolution: {integrity: sha512-g4q6l/C+GpbHujr+FZj7iRLLZcN1P/R0yE4LBnShia2RHn59/F5HvhZh5JUYUsKfMYKGNat8xsE9rxsUOqMP+A==}
+  '@w5s/conventional-changelog@3.33.0':
+    resolution: {integrity: sha512-EkutZdRrszeVjKdn2aHb/GN5WtJEItgL/ZOtZa/cKL3UbE5Bxlnp7wf/qoMESmIyKfdog3HhnmCOfsKyjJ2V9A==}
     engines: {node: '>=22.0.0'}
 
   '@w5s/dev@5.0.0':
@@ -1237,6 +1237,9 @@ packages:
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
+
+  emoji-regex@11.0.0:
+    resolution: {integrity: sha512-2qQtc7syPcJmvF7BfKxBvwgvhzDth6u3q23+Jr4JOQUcmMGgmj7B4/ePZ2DmOhrrb77S8kMNHq2kilVASysfqA==}
 
   empathic@2.1.0:
     resolution: {integrity: sha512-AnfC1ATldl49/cvZdLPDjBfrRNwbDO05aibiOtzQu3qtlbJtomNLhF30HEtn/7iBz50dlMECqATo3fG0LrdEgw==}
@@ -3405,17 +3408,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@w5s/commitlint-config@3.30.0(@commitlint/cli@21.2.3(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))':
+  '@w5s/commitlint-config@3.32.0(@commitlint/cli@21.2.3(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3))':
     dependencies:
       '@commitlint/types': 21.2.3
-      '@w5s/conventional-changelog': 3.31.0
+      '@w5s/conventional-changelog': 3.33.0
     optionalDependencies:
       '@commitlint/cli': 21.2.3(@types/node@20.19.43)(conventional-commits-parser@7.1.2)(typescript@6.0.3)
 
-  '@w5s/conventional-changelog@3.31.0':
+  '@w5s/conventional-changelog@3.33.0':
     dependencies:
       '@commitlint/types': 21.2.3
-      emoji-regex: 10.6.0
+      emoji-regex: 11.0.0
       gitmojis: 3.15.0
 
   '@w5s/dev@5.0.0':
@@ -3859,6 +3862,8 @@ snapshots:
   electron-to-chromium@1.5.439: {}
 
   emoji-regex@10.6.0: {}
+
+  emoji-regex@11.0.0: {}
 
   empathic@2.1.0: {}
 
