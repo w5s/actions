@@ -32,6 +32,11 @@ runs:
       uses: pnpm/action-setup@v6.1.0
       with:
         version: ${{ steps.detect-package-manager.outputs.package_manager_version != '' && steps.detect-package-manager.outputs.package_manager_version || 'latest' }}
+        # pnpm/action-setup compares `version` with packageManager in package_json_file,
+        # resolved from GITHUB_WORKSPACE. The default is the workspace-root package.json,
+        # so a nested working-directory whose pnpm pin comes from .tool-versions fails
+        # when the root manifest names a different pnpm version.
+        package_json_file: ${{ format('{0}/package.json', inputs.working-directory) }}
         run_install: false
       if: steps.detect-package-manager.outputs.package_manager == 'pnpm'
 
