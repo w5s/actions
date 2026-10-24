@@ -33,7 +33,7 @@
     "validate": "turbo run build lint test spellcheck"
   },
   "devDependencies": {
-    "@commitlint/cli": "21.2.3",
+    "@commitlint/cli": "21.2.4",
     "@types/node": "20.19.43",
     "@w5s/commitlint-config": "3.32.0",
     "@w5s/eslint-config": "7.1.2",
